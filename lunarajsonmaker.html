@@ -1,529 +1,454 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lunara JSON Generator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AnimalCompanyMods Inventory Generator</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-primary: #f8f9fa;
-      --bg-secondary: #e9ecef;
-      --text-primary: #212529;
-      --text-secondary: #495057;
-      --accent-color: #0d6efd;
-      --accent-hover: #0b5ed7;
-      --border-color: #dee2e6;
-      --card-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-      --input-bg: #ffffff;
-      --table-header: #f1f3f5;
-      --delete-color: #dc3545;
+      --primary: #4CAF50;
+      --primary-dark: #388E3C;
+      --secondary: #FF9800;
+      --background: #121212;
+      --surface: #1E1E1E;
+      --text: #E0E0E0;
+      --border: #333;
     }
-
-    [data-theme="dark"] {
-      --bg-primary: #121212;
-      --bg-secondary: #1e1e1e;
-      --text-primary: #f8f9fa;
-      --text-secondary: #adb5bd;
-      --accent-color: #0d6efd;
-      --accent-hover: #3d8bfd;
-      --border-color: #2d2d2d;
-      --card-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
-      --input-bg: #2d2d2d;
-      --table-header: #252525;
-      --delete-color: #ff6b6b;
+    
+    [data-theme="light"] {
+      --primary: #4CAF50;
+      --primary-dark: #388E3C;
+      --secondary: #FF9800;
+      --background: #f5f5f5;
+      --surface: #ffffff;
+      --text: #333333;
+      --border: #e0e0e0;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      margin: 0;
       padding: 20px;
-      transition: background-color 0.3s ease, color 0.3s ease;
     }
-
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 0 15px;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    
+    .header-container {
+      text-align: center;
       margin-bottom: 30px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid var(--border-color);
+      position: relative;
     }
-
+    
     h1 {
-      font-size: 1.8rem;
-      color: var(--accent-color);
+      color: var(--primary);
+      font-size: 2.2rem;
+      margin: 10px 0;
       font-weight: 600;
     }
-
-    .theme-toggle {
-      background: var(--bg-secondary);
-      border: none;
-      border-radius: 50px;
-      padding: 8px 15px;
+    
+    .mode-toggle-container {
       display: flex;
+      justify-content: center;
       align-items: center;
-      gap: 8px;
+      gap: 20px;
+      margin-bottom: 10px;
+    }
+    
+    .theme-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+    }
+    
+    .theme-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
       cursor: pointer;
-      color: var(--text-primary);
-      font-weight: 500;
-      transition: all 0.3s ease;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--surface);
+      transition: .4s;
+      border-radius: 34px;
+      border: 1px solid var(--border);
     }
-
-    .theme-toggle:hover {
-      background: var(--border-color);
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 4px;
+      bottom: 3px;
+      background-color: var(--primary);
+      transition: .4s;
+      border-radius: 50%;
     }
-
-    .card {
-      background: var(--bg-secondary);
-      border-radius: 10px;
+    
+    input:checked + .slider {
+      background-color: var(--surface);
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(28px);
+      background-color: var(--secondary);
+    }
+    
+    .slider-icons {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 8px;
+      align-items: center;
+      height: 100%;
+    }
+    
+    .search-container {
+      max-width: 600px;
+      margin: 0 auto 30px;
+      position: relative;
+    }
+    
+    #searchInput {
+      width: 100%;
+      padding: 12px 20px;
+      border-radius: 30px;
+      border: 1px solid var(--border);
+      background-color: var(--surface);
+      color: var(--text);
+      font-size: 1rem;
+    }
+    
+    .search-suggestions {
+      position: absolute;
+      width: 100%;
+      max-height: 200px;
+      overflow-y: auto;
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      z-index: 10;
+      display: none;
+    }
+    
+    .form-section {
+      background-color: var(--surface);
       padding: 25px;
-      margin-bottom: 25px;
-      box-shadow: var(--card-shadow);
-      transition: all 0.3s ease;
+      border-radius: 15px;
+      max-width: 800px;
+      margin: 0 auto 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-
-    .card-title {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      color: var(--accent-color);
-      font-weight: 500;
-    }
-
-    .form-group {
+    
+    .form-field {
       margin-bottom: 20px;
     }
-
+    
     label {
       display: block;
       margin-bottom: 8px;
       font-weight: 500;
-      color: var(--text-primary);
     }
-
-    input, button, select {
+    
+    select, input[type="number"], input[type="text"] {
       width: 100%;
-      padding: 12px 15px;
-      border-radius: 6px;
-      border: 1px solid var(--border-color);
-      background-color: var(--input-bg);
-      color: var(--text-primary);
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background-color: var(--surface);
+      color: var(--text);
       font-size: 1rem;
-      transition: all 0.3s ease;
     }
-
-    input:focus, select:focus {
-      outline: none;
-      border-color: var(--accent-color);
-      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
-    }
-
-    button {
-      background-color: var(--accent-color);
-      color: white;
-      font-weight: 500;
-      cursor: pointer;
-      border: none;
-      margin-top: 10px;
-    }
-
-    button:hover {
-      background-color: var(--accent-hover);
-    }
-
-    .btn-group {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .btn-group button {
-      flex: 1;
-    }
-
-    #searchResults {
-      position: absolute;
-      width: calc(100% - 30px);
-      max-height: 300px;
-      overflow-y: auto;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      margin-top: 5px;
-      z-index: 100;
-      box-shadow: var(--card-shadow);
-      display: none;
-    }
-
-    .result-item {
-      padding: 12px 15px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .result-item:hover {
-      background-color: var(--border-color);
-    }
-
-    .result-item:last-child {
-      border-bottom: none;
-    }
-
-    .selected-item {
-      margin-top: 15px;
-      font-weight: 500;
-    }
-
-    .selected-item span {
-      color: var(--accent-color);
-      font-weight: 600;
-    }
-
+    
     .input-row {
       display: flex;
-      flex-wrap: wrap;
       gap: 15px;
-      margin-bottom: 15px;
+      align-items: center;
     }
-
-    .input-col {
+    
+    .input-container {
       flex: 1;
-      min-width: 150px;
     }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      font-size: 0.95rem;
+    
+    .random-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
     }
-
-    th, td {
-      padding: 12px 15px;
-      text-align: left;
-      border-bottom: 1px solid var(--border-color);
+    
+    .random-toggle-wrap {
+      margin-left: 10px;
     }
-
-    th {
-      background-color: var(--table-header);
-      font-weight: 600;
-      position: sticky;
-      top: 0;
+    
+    .random-mode-toggle {
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
-
-    tr:hover {
-      background-color: var(--border-color);
+    
+    .toggle-label {
+      font-size: 0.9rem;
     }
-
-    .delete-btn {
-      background: none;
+    
+    #addItem {
+      background-color: var(--primary);
+      color: white;
       border: none;
-      color: var(--delete-color);
+      padding: 12px 25px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 1.1rem;
-      padding: 5px;
+      font-weight: 600;
+      font-size: 1rem;
+      width: 100%;
+      margin-top: 15px;
+      transition: background-color 0.3s;
     }
-
-    .delete-btn:hover {
-      opacity: 0.8;
+    
+    #addItem:hover {
+      background-color: var(--primary-dark);
     }
-
+    
+    .item-section {
+      background-color: var(--surface);
+      padding: 25px;
+      border-radius: 15px;
+      max-width: 800px;
+      margin: 0 auto;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    h2 {
+      color: var(--primary);
+      font-size: 1.5rem;
+      margin: 0;
+    }
+    
+    #downloadJson {
+      background-color: var(--secondary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.3s;
+      font-size: 0.9rem;
+    }
+    
+    #downloadJson:hover {
+      opacity: 0.9;
+    }
+    
+    .inventory-tree {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .inventory-tree li {
+      padding: 10px 15px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .inventory-tree li:last-child {
+      border-bottom: none;
+    }
+    
     @media (max-width: 768px) {
-      .container {
-        padding: 0 10px;
+      .input-row {
+        flex-direction: column;
+        gap: 10px;
       }
       
-      .card {
+      .random-container {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      
+      #downloadJson {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .form-section, .item-section {
         padding: 20px;
       }
-      
-      .input-col {
-        min-width: 100%;
-      }
-      
-      table {
-        font-size: 0.85rem;
-      }
-      
-      th, td {
-        padding: 8px 10px;
-      }
     }
-
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .fade-in {
-      animation: fadeIn 0.4s ease forwards;
+    
+    @media (max-width: 480px) {
+      body {
+        padding: 15px;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      h2 {
+        font-size: 1.2rem;
+      }
+      
+      .item-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      #downloadJson {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Lunara Inventory Generator</h1>
-      <button class="theme-toggle" id="themeToggle">
-        <span id="themeIcon">🌙</span>
-        <span id="themeText">Dark Mode</span>
-      </button>
-    </header>
-
-    <div class="card fade-in">
-      <h2 class="card-title">Item Selection</h2>
-      <div class="form-group">
-        <label for="searchInput">Search Items</label>
-        <input type="text" id="searchInput" placeholder="Start typing to search items..." autocomplete="off">
-        <div id="searchResults"></div>
-        <div class="selected-item">
-          Selected Item ID: <span id="selectedItemID">None</span>
-        </div>
-      </div>
+  <div class="header-container">
+    <div class="mode-toggle-container">
+      <label class="theme-switch" for="themeToggle">
+        <input type="checkbox" id="themeToggle" checked>
+        <span class="slider">
+          <span class="slider-icons">
+            <span>☀️</span>
+            <span>🌙</span>
+          </span>
+        </span>
+      </label>
     </div>
-
-    <div class="card fade-in">
-      <h2 class="card-title">Item Properties</h2>
-      <div class="input-row">
-        <div class="input-col">
-          <label for="hue">Hue (0–210)</label>
-          <input type="number" id="hue" value="0" min="0" max="210">
-        </div>
-        <div class="input-col">
-          <label for="saturation">Saturation (0–120)</label>
-          <input type="number" id="saturation" value="0" min="0" max="120">
-        </div>
-        <div class="input-col">
-          <label for="scale">Scale (−128 to 127)</label>
-          <input type="number" id="scale" value="-100" min="-128" max="127">
-        </div>
-        <div class="input-col">
-          <label for="amount">Amount</label>
-          <input type="number" id="amount" value="1" min="1" max="500">
-        </div>
-      </div>
-      <div class="btn-group">
-        <button onclick="addItem()">Add Item</button>
-        <button onclick="generateJSON()">Generate JSON</button>
-      </div>
-    </div>
-
-    <div class="card fade-in">
-      <h2 class="card-title">Inventory Items</h2>
-      <div style="overflow-x: auto;">
-        <table>
-          <thead>
-            <tr>
-              <th>Item ID</th>
-              <th>Hue</th>
-              <th>Saturation</th>
-              <th>Scale</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
-    </div>
+    <h1>AnimalCompanyMods Inventory Generator</h1>
   </div>
 
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search items..." />
+    <div id="searchSuggestions" class="search-suggestions"></div>
+  </div>
+
+  <div class="form-section">
+    <div class="form-field">
+      <label for="itemSelect">Item:</label>
+      <select id="itemSelect"></select>
+    </div>
+
+    <div class="form-field">
+      <label>Hue:</label>
+      <div class="input-row">
+        <div class="input-container">
+          <input type="number" id="hue" value="0" />
+        </div>
+        <div class="random-container">
+          <input type="checkbox" id="randomHue" />
+          <label for="randomHue">Random</label>
+          <div class="random-toggle-wrap" id="randomHueToggleWrap">
+            <label class="random-mode-toggle">
+              <input type="checkbox" id="sameRandomHue" checked>
+              <span class="toggle-label">Same</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label>Saturation:</label>
+      <div class="input-row">
+        <div class="input-container">
+          <input type="number" id="saturation" value="0" />
+        </div>
+        <div class="random-container">
+          <input type="checkbox" id="randomSaturation" />
+          <label for="randomSaturation">Random</label>
+          <div class="random-toggle-wrap" id="randomSaturationToggleWrap">
+            <label class="random-mode-toggle">
+              <input type="checkbox" id="sameRandomSaturation" checked>
+              <span class="toggle-label">Same</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label>Size (Scale Modifier):</label>
+      <div class="input-row">
+        <div class="input-container">
+          <input type="number" id="size" value="0" />
+        </div>
+        <div class="random-container">
+          <input type="checkbox" id="randomSize" />
+          <label for="randomSize">Random</label>
+          <div class="random-toggle-wrap" id="randomSizeToggleWrap">
+            <label class="random-mode-toggle">
+              <input type="checkbox" id="sameRandomSize" checked>
+              <span class="toggle-label">Same</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="count-field">
+      <label for="count">Count:</label>
+      <input type="number" id="count" value="1" min="1" />
+    </div>
+
+    <div id="containerSelection">
+      <label for="containerSelect">Add to container:</label>
+      <select id="containerSelect">
+        <option value="root">Root (No Container)</option>
+      </select>
+    </div>
+
+    <button id="addItem">Add Item</button>
+  </div>
+
+  <div class="item-section">
+    <div class="item-header">
+      <h2>Inventory Items</h2>
+      <button id="downloadJson">Download JSON</button>
+    </div>
+    <ul id="inventoryTree" class="inventory-tree"></ul>
+  </div>
+
+  <script src="script.js"></script>
   <script>
-    // Theme toggle functionality
     const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    const themeText = document.getElementById('themeText');
-    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    const htmlElement = document.documentElement;
+    
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    htmlElement.setAttribute('data-theme', savedTheme);
+    themeToggle.checked = savedTheme === 'dark';
 
-    // Set initial theme based on system preference
-    if (prefersDarkScheme.matches) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      themeIcon.textContent = '☀️';
-      themeText.textContent = 'Light Mode';
-    }
-
-    themeToggle.addEventListener('click', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      if (currentTheme === 'dark') {
-        document.documentElement.removeAttribute('data-theme');
-        themeIcon.textContent = '🌙';
-        themeText.textContent = 'Dark Mode';
+    themeToggle.addEventListener('change', function() {
+      if (this.checked) {
+        htmlElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
       } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        themeIcon.textContent = '☀️';
-        themeText.textContent = 'Light Mode';
+        htmlElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
       }
     });
-
-    // Application logic
-    const items = [];
-    let econItems = [];
-    let selectedItemID = null;
-
-    fetch('gamedata/econ_gameplay_items.json')
-      .then(res => res.json())
-      .then(data => {
-        econItems = data.map(i => ({ id: i.id, name: i.name }));
-      })
-      .catch(err => {
-        console.error(err);
-        alert("Failed to load item list. Make sure gamedata/econ_gameplay_items.json exists.");
-      });
-
-    function searchItems() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      if (query.length < 2) {
-        document.getElementById('searchResults').style.display = 'none';
-        return;
-      }
-
-      const results = econItems.filter(i => 
-        i.name.toLowerCase().includes(query) || 
-        i.id.toLowerCase().includes(query)
-      ).slice(0, 50); // Limit to 50 results for performance
-
-      const container = document.getElementById('searchResults');
-      container.innerHTML = '';
-
-      if (results.length === 0) {
-        const noResults = document.createElement('div');
-        noResults.className = 'result-item';
-        noResults.textContent = 'No items found';
-        container.appendChild(noResults);
-      } else {
-        results.forEach(item => {
-          const div = document.createElement('div');
-          div.className = 'result-item';
-          div.innerHTML = `<strong>${item.name}</strong><br><small>${item.id}</small>`;
-          div.onclick = () => selectItem(item);
-          container.appendChild(div);
-        });
-      }
-
-      container.style.display = 'block';
-    }
-
-    function selectItem(item) {
-      selectedItemID = item.id;
-      document.getElementById('selectedItemID').textContent = item.id;
-      document.getElementById('searchInput').value = item.name;
-      document.getElementById('searchResults').style.display = 'none';
-    }
-
-    // Close search results when clicking outside
-    document.addEventListener('click', (e) => {
-      if (e.target.id !== 'searchInput') {
-        document.getElementById('searchResults').style.display = 'none';
-      }
-    });
-
-    function addItem() {
-      if (!selectedItemID) {
-        alert("Please select an item first.");
-        return;
-      }
-
-      const colorHue = Math.min(210, Math.max(0, parseInt(document.getElementById('hue').value, 10)));
-      const colorSaturation = Math.min(120, Math.max(0, parseInt(document.getElementById('saturation').value, 10)));
-      const scaleModifier = Math.min(127, Math.max(-128, parseInt(document.getElementById('scale').value, 10)));
-      const amount = Math.max(1, parseInt(document.getElementById('amount').value, 10));
-
-      for (let i = 0; i < amount; i++) {
-        items.push({
-          itemID: selectedItemID,
-          colorHue,
-          colorSaturation,
-          scaleModifier
-        });
-      }
-
-      updateTable();
-    }
-
-    function updateTable() {
-      const table = document.getElementById('tableBody');
-      table.innerHTML = '';
-      
-      if (items.length === 0) {
-        const row = document.createElement('tr');
-        row.innerHTML = `<td colspan="5" style="text-align: center;">No items added yet</td>`;
-        table.appendChild(row);
-        return;
-      }
-
-      items.forEach((item, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${item.itemID}</td>
-          <td>${item.colorHue}</td>
-          <td>${item.colorSaturation}</td>
-          <td>${item.scaleModifier}</td>
-          <td><button class="delete-btn" onclick="deleteItem(${index})" title="Delete item">🗑️</button></td>
-        `;
-        table.appendChild(row);
-      });
-    }
-
-    function deleteItem(index) {
-      if (confirm("Are you sure you want to remove this item?")) {
-        items.splice(index, 1);
-        updateTable();
-      }
-    }
-
-    function generateJSON() {
-      if (items.length === 0) {
-        alert("Please add at least one item before generating JSON.");
-        return;
-      }
-
-      const structuredItems = {
-        objects: [
-          {
-            collection: "user_inventory",
-            key: "stash",
-            permission_read: 1,
-            permission_write: 1,
-            value: JSON.stringify({
-              version: 1,
-              items: [
-                {
-                  itemID: "item_backpack_large_base",
-                  children: items
-                }
-              ]
-            })
-          }
-        ]
-      };
-
-      const blob = new Blob([JSON.stringify(structuredItems, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = "custom_inventory.json";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-
-    // Initialize table with empty state
-    updateTable();
   </script>
 </body>
 </html>
