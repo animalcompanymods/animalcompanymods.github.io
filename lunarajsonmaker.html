@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AnimalCompanyMods Inventory Generator</title>
-  <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -33,6 +32,12 @@
       color: var(--text);
       margin: 0;
       padding: 20px;
+      min-width: 1024px;
+    }
+    
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
     }
     
     .header-container {
@@ -112,7 +117,7 @@
     }
     
     .search-container {
-      max-width: 600px;
+      max-width: 800px;
       margin: 0 auto 30px;
       position: relative;
     }
@@ -130,7 +135,7 @@
     .search-suggestions {
       position: absolute;
       width: 100%;
-      max-height: 200px;
+      max-height: 300px;
       overflow-y: auto;
       background-color: var(--surface);
       border: 1px solid var(--border);
@@ -144,7 +149,7 @@
       background-color: var(--surface);
       padding: 25px;
       border-radius: 15px;
-      max-width: 800px;
+      max-width: 1000px;
       margin: 0 auto 30px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
@@ -222,7 +227,7 @@
       background-color: var(--surface);
       padding: 25px;
       border-radius: 15px;
-      max-width: 800px;
+      max-width: 1000px;
       margin: 0 auto;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
@@ -274,6 +279,17 @@
       border-bottom: none;
     }
     
+    @media (max-width: 1200px) {
+      body {
+        min-width: auto;
+        padding: 15px;
+      }
+      
+      .main-container {
+        max-width: 100%;
+      }
+    }
+    
     @media (max-width: 768px) {
       .input-row {
         flex-direction: column;
@@ -301,7 +317,7 @@
     
     @media (max-width: 480px) {
       body {
-        padding: 15px;
+        padding: 10px;
       }
       
       h1 {
@@ -325,114 +341,263 @@
   </style>
 </head>
 <body>
-  <div class="header-container">
-    <div class="mode-toggle-container">
-      <label class="theme-switch" for="themeToggle">
-        <input type="checkbox" id="themeToggle" checked>
-        <span class="slider">
-          <span class="slider-icons">
-            <span>☀️</span>
-            <span>🌙</span>
+  <div class="main-container">
+    <div class="header-container">
+      <div class="mode-toggle-container">
+        <label class="theme-switch" for="themeToggle">
+          <input type="checkbox" id="themeToggle" checked>
+          <span class="slider">
+            <span class="slider-icons">
+              <span>☀️</span>
+              <span>🌙</span>
+            </span>
           </span>
-        </span>
-      </label>
-    </div>
-    <h1>AnimalCompanyMods Inventory Generator</h1>
-  </div>
-
-  <div class="search-container">
-    <input type="text" id="searchInput" placeholder="Search items..." />
-    <div id="searchSuggestions" class="search-suggestions"></div>
-  </div>
-
-  <div class="form-section">
-    <div class="form-field">
-      <label for="itemSelect">Item:</label>
-      <select id="itemSelect"></select>
+        </label>
+      </div>
+      <h1>AnimalCompanyMods Inventory Generator</h1>
     </div>
 
-    <div class="form-field">
-      <label>Hue:</label>
-      <div class="input-row">
-        <div class="input-container">
-          <input type="number" id="hue" value="0" />
-        </div>
-        <div class="random-container">
-          <input type="checkbox" id="randomHue" />
-          <label for="randomHue">Random</label>
-          <div class="random-toggle-wrap" id="randomHueToggleWrap">
-            <label class="random-mode-toggle">
-              <input type="checkbox" id="sameRandomHue" checked>
-              <span class="toggle-label">Same</span>
-            </label>
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search items..." />
+      <div id="searchSuggestions" class="search-suggestions"></div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-field">
+        <label for="itemSelect">Item:</label>
+        <select id="itemSelect"></select>
+      </div>
+
+      <div class="form-field">
+        <label>Hue:</label>
+        <div class="input-row">
+          <div class="input-container">
+            <input type="number" id="hue" value="0" />
+          </div>
+          <div class="random-container">
+            <input type="checkbox" id="randomHue" />
+            <label for="randomHue">Random</label>
+            <div class="random-toggle-wrap" id="randomHueToggleWrap">
+              <label class="random-mode-toggle">
+                <input type="checkbox" id="sameRandomHue" checked>
+                <span class="toggle-label">Same</span>
+              </label>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="form-field">
-      <label>Saturation:</label>
-      <div class="input-row">
-        <div class="input-container">
-          <input type="number" id="saturation" value="0" />
-        </div>
-        <div class="random-container">
-          <input type="checkbox" id="randomSaturation" />
-          <label for="randomSaturation">Random</label>
-          <div class="random-toggle-wrap" id="randomSaturationToggleWrap">
-            <label class="random-mode-toggle">
-              <input type="checkbox" id="sameRandomSaturation" checked>
-              <span class="toggle-label">Same</span>
-            </label>
+      <div class="form-field">
+        <label>Saturation:</label>
+        <div class="input-row">
+          <div class="input-container">
+            <input type="number" id="saturation" value="0" />
+          </div>
+          <div class="random-container">
+            <input type="checkbox" id="randomSaturation" />
+            <label for="randomSaturation">Random</label>
+            <div class="random-toggle-wrap" id="randomSaturationToggleWrap">
+              <label class="random-mode-toggle">
+                <input type="checkbox" id="sameRandomSaturation" checked>
+                <span class="toggle-label">Same</span>
+              </label>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="form-field">
-      <label>Size (Scale Modifier):</label>
-      <div class="input-row">
-        <div class="input-container">
-          <input type="number" id="size" value="0" />
-        </div>
-        <div class="random-container">
-          <input type="checkbox" id="randomSize" />
-          <label for="randomSize">Random</label>
-          <div class="random-toggle-wrap" id="randomSizeToggleWrap">
-            <label class="random-mode-toggle">
-              <input type="checkbox" id="sameRandomSize" checked>
-              <span class="toggle-label">Same</span>
-            </label>
+      <div class="form-field">
+        <label>Size (Scale Modifier):</label>
+        <div class="input-row">
+          <div class="input-container">
+            <input type="number" id="size" value="0" />
+          </div>
+          <div class="random-container">
+            <input type="checkbox" id="randomSize" />
+            <label for="randomSize">Random</label>
+            <div class="random-toggle-wrap" id="randomSizeToggleWrap">
+              <label class="random-mode-toggle">
+                <input type="checkbox" id="sameRandomSize" checked>
+                <span class="toggle-label">Same</span>
+              </label>
+            </div>
           </div>
         </div>
       </div>
+
+      <div class="count-field">
+        <label for="count">Count:</label>
+        <input type="number" id="count" value="1" min="1" />
+      </div>
+
+      <div id="containerSelection">
+        <label for="containerSelect">Add to container:</label>
+        <select id="containerSelect">
+          <option value="root">Root (No Container)</option>
+        </select>
+      </div>
+
+      <button id="addItem">Add Item</button>
     </div>
 
-    <div class="count-field">
-      <label for="count">Count:</label>
-      <input type="number" id="count" value="1" min="1" />
+    <div class="item-section">
+      <div class="item-header">
+        <h2>Inventory Items</h2>
+        <button id="downloadJson">Download JSON</button>
+      </div>
+      <ul id="inventoryTree" class="inventory-tree"></ul>
     </div>
-
-    <div id="containerSelection">
-      <label for="containerSelect">Add to container:</label>
-      <select id="containerSelect">
-        <option value="root">Root (No Container)</option>
-      </select>
-    </div>
-
-    <button id="addItem">Add Item</button>
   </div>
 
-  <div class="item-section">
-    <div class="item-header">
-      <h2>Inventory Items</h2>
-      <button id="downloadJson">Download JSON</button>
-    </div>
-    <ul id="inventoryTree" class="inventory-tree"></ul>
-  </div>
-
-  <script src="script.js"></script>
   <script>
+    // Inventory data structure
+    const inventory = {
+      root: {
+        name: "Root",
+        children: []
+      }
+    };
+
+    // DOM elements
+    const itemSelect = document.getElementById('itemSelect');
+    const containerSelect = document.getElementById('containerSelect');
+    const inventoryTree = document.getElementById('inventoryTree');
+    const addItemBtn = document.getElementById('addItem');
+    const downloadJsonBtn = document.getElementById('downloadJson');
+
+    // Function to update container dropdown
+    function updateContainerSelect() {
+      containerSelect.innerHTML = '<option value="root">Root (No Container)</option>';
+      
+      function addContainers(parentId, prefix = '') {
+        const container = inventory[parentId];
+        if (container.children) {
+          container.children.forEach(childId => {
+            const child = inventory[childId];
+            if (child.isContainer) {
+              const option = document.createElement('option');
+              option.value = childId;
+              option.textContent = prefix + child.name;
+              containerSelect.appendChild(option);
+              addContainers(childId, prefix + '-- ');
+            }
+          });
+        }
+      }
+      
+      addContainers('root');
+    }
+
+    // Function to render inventory tree
+    function renderInventoryTree() {
+      inventoryTree.innerHTML = '';
+      
+      function renderItems(parentId, parentElement) {
+        const container = inventory[parentId];
+        if (container.children) {
+          container.children.forEach(childId => {
+            const child = inventory[childId];
+            const li = document.createElement('li');
+            
+            const itemInfo = document.createElement('span');
+            itemInfo.textContent = `${child.name} (Hue: ${child.hue}, Sat: ${child.saturation}, Size: ${child.size})`;
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'Delete';
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.onclick = () => {
+              // Remove from parent's children
+              const parent = inventory[parentId];
+              parent.children = parent.children.filter(id => id !== childId);
+              // Remove from inventory
+              delete inventory[childId];
+              renderInventoryTree();
+              updateContainerSelect();
+            };
+            
+            li.appendChild(itemInfo);
+            li.appendChild(deleteBtn);
+            parentElement.appendChild(li);
+            
+            if (child.isContainer && child.children && child.children.length > 0) {
+              const ul = document.createElement('ul');
+              li.appendChild(ul);
+              renderItems(childId, ul);
+            }
+          });
+        }
+      }
+      
+      renderItems('root', inventoryTree);
+    }
+
+    // Add item button handler
+    addItemBtn.addEventListener('click', () => {
+      const itemId = 'item-' + Date.now();
+      const itemName = itemSelect.options[itemSelect.selectedIndex].text;
+      const hue = document.getElementById('hue').value;
+      const saturation = document.getElementById('saturation').value;
+      const size = document.getElementById('size').value;
+      const count = document.getElementById('count').value;
+      const containerId = containerSelect.value;
+      
+      // Create new item
+      inventory[itemId] = {
+        name: itemName,
+        hue: hue,
+        saturation: saturation,
+        size: size,
+        count: count,
+        isContainer: false
+      };
+      
+      // Add to selected container
+      if (!inventory[containerId].children) {
+        inventory[containerId].children = [];
+      }
+      inventory[containerId].children.push(itemId);
+      
+      renderInventoryTree();
+      updateContainerSelect();
+    });
+
+    // Download JSON button handler
+    downloadJsonBtn.addEventListener('click', () => {
+      // Create a clean copy of the inventory without internal references
+      function createExportObject(parentId) {
+        const container = inventory[parentId];
+        const exportObj = {
+          name: container.name,
+          hue: container.hue || 0,
+          saturation: container.saturation || 0,
+          size: container.size || 0,
+          count: container.count || 1,
+          isContainer: container.isContainer || false
+        };
+        
+        if (container.children && container.children.length > 0) {
+          exportObj.children = container.children.map(childId => createExportObject(childId));
+        }
+        
+        return exportObj;
+      }
+      
+      const exportData = createExportObject('root');
+      const dataStr = JSON.stringify(exportData.children, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+      
+      const exportFileDefaultName = 'inventory.json';
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+    });
+
+    // Initialize
+    updateContainerSelect();
+    renderInventoryTree();
+
+    // Theme toggle functionality
     const themeToggle = document.getElementById('themeToggle');
     const htmlElement = document.documentElement;
     
