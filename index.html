@@ -38,6 +38,14 @@
             z-index: 10;
         }
 
+        .header-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
         .logo-container {
             display: flex;
             justify-content: center;
@@ -207,6 +215,64 @@
             box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
         }
 
+        /* Theme toggle switch */
+        .theme-switch-container {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 50px;
+        }
+
+        .theme-switch input {
+            display: none;
+        }
+
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            background-color: white;
+            bottom: 3px;
+            content: "";
+            height: 18px;
+            left: 3px;
+            position: absolute;
+            transition: .4s;
+            width: 18px;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .theme-label {
+            color: white;
+            font-size: 0.9rem;
+        }
+
         /* Mobile-specific styles */
         @media (max-width: 768px) {
             .logo-container {
@@ -254,6 +320,13 @@
                 height: 70vh;
                 min-height: 300px;
             }
+
+            .theme-switch-container {
+                position: static;
+                margin-top: 0.5rem;
+                justify-content: center;
+                width: 100%;
+            }
         }
 
         @media (max-width: 480px) {
@@ -271,11 +344,21 @@
         }
     </style>
 </head>
-<body>
+<body data-theme="dark">
     <header>
-        <div class="logo-container">
-            <img src="logo.png" alt="Animal Company Mods Logo" class="logo">
-            <h1>Animal Company Mods</h1>
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="logo.png" alt="Animal Company Mods Logo" class="logo">
+                <h1>Animal Company Mods</h1>
+            </div>
+            <div class="theme-switch-container">
+                <span class="theme-label">Dark</span>
+                <label class="theme-switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="theme-label">Light</span>
+            </div>
         </div>
     </header>
 
@@ -365,6 +448,46 @@
                 behavior: 'smooth'
             });
         });
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        
+        // Check for saved theme preference or use dark mode as default
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        body.setAttribute('data-theme', savedTheme);
+        
+        // Set the toggle state based on current theme
+        if (savedTheme === 'light') {
+            themeToggle.checked = true;
+            updateThemeLabels('light');
+        } else {
+            updateThemeLabels('dark');
+        }
+        
+        // Toggle theme when switch is clicked
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                body.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                updateThemeLabels('light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                updateThemeLabels('dark');
+            }
+        });
+        
+        function updateThemeLabels(theme) {
+            const labels = document.querySelectorAll('.theme-label');
+            labels.forEach(label => {
+                if (label.textContent.toLowerCase() !== theme) {
+                    label.style.opacity = '0.6';
+                } else {
+                    label.style.opacity = '1';
+                }
+            });
+        }
 
         // Ensure proper mobile viewport scaling
         function setViewportScale() {
