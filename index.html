@@ -4,19 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Animal Company Mods</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        :root {
-            --primary-color: #4CAF50;
-            --secondary-color: #2E7D32;
-            --accent-color: #8BC34A;
-            --dark-color: #1B5E20;
-            --light-color: #C8E6C9;
-            --text-dark: #212121;
-            --text-light: #f5f5f5;
-            --discord-blurple: #5865F2;
-            --discord-green: #57F287;
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
@@ -26,9 +15,9 @@
         html, body {
             height: 100%;
             width: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
-            color: var(--text-dark);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             overflow-x: hidden;
         }
 
@@ -36,6 +25,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            padding: 0;
         }
 
         header {
@@ -64,10 +54,20 @@
         h1 {
             font-size: clamp(1.5rem, 4vw, 2rem);
             white-space: nowrap;
+            background: none;
+            -webkit-text-fill-color: white;
+            color: white;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 16px;
         }
 
         .discord-banner {
-            background-color: var(--discord-blurple);
+            background-color: var(--accent-color);
             color: white;
             padding: 0.5rem;
             display: flex;
@@ -80,7 +80,7 @@
         }
 
         .discord-btn {
-            background-color: var(--discord-green);
+            background-color: var(--success-color);
             color: var(--text-dark);
             border: none;
             padding: 0.5rem 1rem;
@@ -106,12 +106,13 @@
         }
 
         nav {
-            background-color: var(--secondary-color);
+            background-color: var(--card-bg);
             display: flex;
             justify-content: center;
             position: sticky;
             top: 0;
             z-index: 5;
+            box-shadow: var(--shadow);
         }
 
         .nav-tabs {
@@ -133,7 +134,7 @@
         .nav-tab {
             padding: 1rem;
             cursor: pointer;
-            color: white;
+            color: var(--text-color);
             transition: all 0.3s ease;
             position: relative;
             flex-shrink: 0;
@@ -141,11 +142,11 @@
         }
 
         .nav-tab:hover {
-            background-color: var(--dark-color);
+            background-color: var(--hover-bg);
         }
 
         .nav-tab.active {
-            background-color: var(--dark-color);
+            background-color: var(--hover-bg);
             font-weight: bold;
         }
 
@@ -156,7 +157,7 @@
             left: 0;
             width: 100%;
             height: 3px;
-            background-color: var(--accent-color);
+            background-color: var(--primary-color);
         }
 
         main {
@@ -165,6 +166,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 1rem;
+            background-color: var(--bg-color);
         }
 
         .content-section {
@@ -172,6 +174,10 @@
             padding: 1rem;
             width: 100%;
             animation: fadeIn 0.5s ease;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
         }
 
         .content-section.active {
@@ -187,17 +193,18 @@
             width: 100%;
             height: 60vh;
             min-height: 400px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
-            background-color: white;
+            background-color: var(--input-bg);
         }
 
         footer {
-            background-color: var(--dark-color);
-            color: white;
+            background-color: var(--card-bg);
+            color: var(--text-color);
             text-align: center;
             padding: 1rem;
             margin-top: auto;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
         }
 
         /* Mobile-specific styles */
@@ -290,7 +297,6 @@
             <li class="nav-tab" data-tab="jsons">JSONs</li>
             <li class="nav-tab" onclick="window.open('lunarajsonmaker.html', '_blank')">Lunara JSON Maker</li>
             <li class="nav-tab" data-tab="about">About</li>
-        
         </ul>
     </nav>
 
