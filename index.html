@@ -10,6 +10,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         html, body {
@@ -18,14 +19,12 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            overflow-x: hidden;
         }
 
         body {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            padding: 0;
         }
 
         header {
@@ -34,37 +33,32 @@
             padding: 1rem;
             text-align: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            position: relative;
-            z-index: 10;
         }
 
         .header-container {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .logo-container {
             display: flex;
-            justify-content: center;
             align-items: center;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .logo {
             height: 60px;
-            margin-right: 1rem;
         }
 
         h1 {
             font-size: clamp(1.5rem, 4vw, 2rem);
             white-space: nowrap;
-            background: none;
-            -webkit-text-fill-color: white;
             color: white;
+            margin: 0;
         }
 
         h2 {
@@ -82,14 +76,11 @@
             justify-content: center;
             gap: 1rem;
             flex-wrap: wrap;
-            position: sticky;
-            top: 0;
-            z-index: 5;
         }
 
         .discord-btn {
             background-color: var(--success-color);
-            color: var(--text-dark);
+            color: #212121;
             border: none;
             padding: 0.5rem 1rem;
             border-radius: 4px;
@@ -100,7 +91,6 @@
             gap: 0.5rem;
             transition: all 0.3s ease;
             font-size: clamp(0.8rem, 3vw, 1rem);
-            white-space: nowrap;
         }
 
         .discord-btn:hover {
@@ -117,10 +107,12 @@
             background-color: var(--card-bg);
             display: flex;
             justify-content: center;
-            position: sticky;
-            top: 0;
-            z-index: 5;
             box-shadow: var(--shadow);
+        }
+
+        .nav-container {
+            width: 100%;
+            max-width: 1200px;
         }
 
         .nav-tabs {
@@ -129,7 +121,6 @@
             padding: 0;
             margin: 0;
             width: 100%;
-            max-width: 1200px;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
@@ -144,8 +135,6 @@
             cursor: pointer;
             color: var(--text-color);
             transition: all 0.3s ease;
-            position: relative;
-            flex-shrink: 0;
             font-size: clamp(0.8rem, 3vw, 1rem);
         }
 
@@ -156,6 +145,7 @@
         .nav-tab.active {
             background-color: var(--hover-bg);
             font-weight: bold;
+            position: relative;
         }
 
         .nav-tab.active::after {
@@ -174,22 +164,20 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 1rem;
-            background-color: var(--bg-color);
         }
 
         .content-section {
             display: none;
-            padding: 1rem;
-            width: 100%;
-            animation: fadeIn 0.5s ease;
+            padding: 1.5rem;
             background-color: var(--card-bg);
-            border-radius: 16px;
+            border-radius: 8px;
             box-shadow: var(--shadow);
             margin-bottom: 1rem;
         }
 
         .content-section.active {
             display: block;
+            animation: fadeIn 0.3s ease;
         }
 
         @keyframes fadeIn {
@@ -215,48 +203,47 @@
             box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
         }
 
-        /* Theme toggle switch */
+        /* Theme toggle styles */
         .theme-switch-container {
-            position: absolute;
-            right: 1rem;
-            top: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
         .theme-switch {
-            display: inline-block;
-            height: 24px;
             position: relative;
+            display: inline-block;
             width: 50px;
+            height: 24px;
         }
 
         .theme-switch input {
-            display: none;
+            opacity: 0;
+            width: 0;
+            height: 0;
         }
 
         .slider {
-            background-color: #ccc;
-            bottom: 0;
-            cursor: pointer;
-            left: 0;
             position: absolute;
-            right: 0;
+            cursor: pointer;
             top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
             transition: .4s;
-            border-radius: 34px;
+            border-radius: 24px;
         }
 
         .slider:before {
-            background-color: white;
-            bottom: 3px;
-            content: "";
-            height: 18px;
-            left: 3px;
             position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
             transition: .4s;
-            width: 18px;
             border-radius: 50%;
         }
 
@@ -271,18 +258,30 @@
         .theme-label {
             color: white;
             font-size: 0.9rem;
+            opacity: 0.7;
         }
 
-        /* Mobile-specific styles */
+        .theme-label.active {
+            opacity: 1;
+            font-weight: bold;
+        }
+
+        /* Mobile styles */
         @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding-bottom: 1rem;
+            }
+
             .logo-container {
                 flex-direction: column;
-                gap: 0.5rem;
+                text-align: center;
             }
 
             .logo {
-                margin-right: 0;
                 height: 50px;
+                margin-bottom: 0.5rem;
             }
 
             h1 {
@@ -290,12 +289,13 @@
             }
 
             .discord-banner {
-                padding: 0.5rem;
+                flex-direction: column;
+                align-items: center;
                 gap: 0.5rem;
+                padding: 0.5rem;
             }
 
             .discord-btn {
-                padding: 0.5rem;
                 width: 100%;
                 justify-content: center;
             }
@@ -304,28 +304,13 @@
                 justify-content: flex-start;
             }
 
-            .nav-tab {
-                padding: 0.8rem 1rem;
-            }
-
-            main {
-                padding: 0.5rem;
-            }
-
             .content-section {
-                padding: 0.5rem;
+                padding: 1rem;
             }
 
             .json-embed {
                 height: 70vh;
                 min-height: 300px;
-            }
-
-            .theme-switch-container {
-                position: static;
-                margin-top: 0.5rem;
-                justify-content: center;
-                width: 100%;
             }
         }
 
@@ -335,7 +320,7 @@
             }
 
             .nav-tab {
-                padding: 0.6rem 0.8rem;
+                padding: 0.8rem;
             }
 
             .json-embed {
@@ -352,12 +337,12 @@
                 <h1>Animal Company Mods</h1>
             </div>
             <div class="theme-switch-container">
-                <span class="theme-label">Dark</span>
+                <span class="theme-label active" id="dark-label">Dark</span>
                 <label class="theme-switch">
                     <input type="checkbox" id="theme-toggle">
                     <span class="slider"></span>
                 </label>
-                <span class="theme-label">Light</span>
+                <span class="theme-label" id="light-label">Light</span>
             </div>
         </div>
     </header>
@@ -374,13 +359,15 @@
     </div>
 
     <nav>
-        <ul class="nav-tabs">
-            <li class="nav-tab active" data-tab="home">Home</li>
-            <li class="nav-tab" data-tab="mods">MetaDatas</li>
-            <li class="nav-tab" data-tab="jsons">JSONs</li>
-            <li class="nav-tab" onclick="window.open('lunarajsonmaker.html', '_blank')">Lunara JSON Maker</li>
-            <li class="nav-tab" data-tab="about">About</li>
-        </ul>
+        <div class="nav-container">
+            <ul class="nav-tabs">
+                <li class="nav-tab active" data-tab="home">Home</li>
+                <li class="nav-tab" data-tab="mods">MetaDatas</li>
+                <li class="nav-tab" data-tab="jsons">JSONs</li>
+                <li class="nav-tab" onclick="window.open('lunarajsonmaker.html', '_blank')">Lunara JSON Maker</li>
+                <li class="nav-tab" data-tab="about">About</li>
+            </ul>
+        </div>
     </nav>
 
     <main>
@@ -415,23 +402,19 @@
     <script>
         // Tab functionality
         document.querySelectorAll('.nav-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                // Remove active class from all tabs and sections
-                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-                
-                // Add active class to clicked tab
-                tab.classList.add('active');
-                
-                // Show corresponding section
-                const tabId = tab.getAttribute('data-tab');
-                document.getElementById(tabId).classList.add('active');
-                
-                // Scroll to top of section
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
+            tab.addEventListener('click', function() {
+                if (this.hasAttribute('data-tab')) {
+                    // Remove active class from all tabs and sections
+                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Show corresponding section
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                }
             });
         });
 
@@ -442,66 +425,46 @@
             
             document.querySelector('.nav-tab[data-tab="home"]').classList.add('active');
             document.getElementById('home').classList.add('active');
-            
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
         });
 
         // Theme toggle functionality
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
+        const darkLabel = document.getElementById('dark-label');
+        const lightLabel = document.getElementById('light-label');
         
-        // Check for saved theme preference or use dark mode as default
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        body.setAttribute('data-theme', savedTheme);
-        
-        // Set the toggle state based on current theme
-        if (savedTheme === 'light') {
-            themeToggle.checked = true;
-            updateThemeLabels('light');
-        } else {
-            updateThemeLabels('dark');
+        // Initialize theme
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            body.setAttribute('data-theme', savedTheme);
+            
+            if (savedTheme === 'light') {
+                themeToggle.checked = true;
+                darkLabel.classList.remove('active');
+                lightLabel.classList.add('active');
+            } else {
+                darkLabel.classList.add('active');
+                lightLabel.classList.remove('active');
+            }
         }
         
-        // Toggle theme when switch is clicked
+        // Toggle theme
         themeToggle.addEventListener('change', function() {
             if (this.checked) {
                 body.setAttribute('data-theme', 'light');
                 localStorage.setItem('theme', 'light');
-                updateThemeLabels('light');
+                darkLabel.classList.remove('active');
+                lightLabel.classList.add('active');
             } else {
                 body.setAttribute('data-theme', 'dark');
                 localStorage.setItem('theme', 'dark');
-                updateThemeLabels('dark');
+                darkLabel.classList.add('active');
+                lightLabel.classList.remove('active');
             }
         });
         
-        function updateThemeLabels(theme) {
-            const labels = document.querySelectorAll('.theme-label');
-            labels.forEach(label => {
-                if (label.textContent.toLowerCase() !== theme) {
-                    label.style.opacity = '0.6';
-                } else {
-                    label.style.opacity = '1';
-                }
-            });
-        }
-
-        // Ensure proper mobile viewport scaling
-        function setViewportScale() {
-            const viewport = document.querySelector('meta[name="viewport"]');
-            if (window.innerWidth <= 768) {
-                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
-            } else {
-                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
-            }
-        }
-
-        // Run on load and resize
-        setViewportScale();
-        window.addEventListener('resize', setViewportScale);
+        // Initialize on load
+        initTheme();
     </script>
 </body>
 </html>
