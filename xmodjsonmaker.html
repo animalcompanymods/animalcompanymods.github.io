@@ -2,46 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Item JSON Generator v6 - EvanBlokEnder</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      padding: 20px;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    h1 {
-      text-align: center;
-    }
-    .section {
-      margin-bottom: 15px;
-    }
-    .credit {
-      text-align: center;
-      font-size: 12px;
-      color: #888;
-    }
-    select, input, button {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-    }
-    .light {
-      background-color: #fff;
-      color: #000;
-    }
-    .dark {
-      background-color: #333;
-      color: #fff;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="light">
+<body>
   <div class="container">
     <h1>Item JSON Generator v6</h1>
 
@@ -57,7 +22,7 @@
 
     <div class="section">
       <label for="itemSelect">Select Item:</label>
-      <select id="itemSelect" size="10"></select>
+      <select id="itemSelect" size="10" style="width:100%;"></select>
     </div>
 
     <div class="section">
@@ -100,62 +65,6 @@
     <p class="credit">Made by EvanBlokEnder</p>
   </div>
 
-  <script>
-    // Fetch list.txt from GitHub and parse it
-    fetch('https://raw.githubusercontent.com/woostergames/woostergames.github.io/refs/heads/main/list.txt')
-      .then(response => response.text())
-      .then(data => {
-        const lines = data.split('\n');
-        const backpacks = [];
-        const items = [];
-
-        // Parse the text file and populate the arrays
-        lines.forEach(line => {
-          if (line.includes('Backpack:')) {
-            backpacks.push(line.replace('Backpack:', '').trim());
-          } else if (line.includes('Item:')) {
-            items.push(line.replace('Item:', '').trim());
-          }
-        });
-
-        // Populate the Backpack dropdown
-        const bagSelect = document.getElementById('bagSelect');
-        backpacks.forEach(backpack => {
-          const option = document.createElement('option');
-          option.value = backpack;
-          option.textContent = backpack;
-          bagSelect.appendChild(option);
-        });
-
-        // Populate the Item dropdown
-        const itemSelect = document.getElementById('itemSelect');
-        items.forEach(item => {
-          const option = document.createElement('option');
-          option.value = item;
-          option.textContent = item;
-          itemSelect.appendChild(option);
-        });
-      })
-      .catch(error => console.error('Error loading list.txt:', error));
-
-    // Functions to handle interactions (placeholders for now)
-    function addItem() {
-      console.log('Add Item functionality triggered');
-    }
-
-    function generateJSON() {
-      console.log('Generate JSON functionality triggered');
-    }
-
-    function resetAll() {
-      console.log('Reset functionality triggered');
-    }
-
-    // Dark/Light Mode Toggle
-    document.body.addEventListener('click', () => {
-      const currentMode = document.body.className;
-      document.body.className = currentMode === 'light' ? 'dark' : 'light';
-    });
-  </script>
+  <script src="generator.js"></script>
 </body>
 </html>
