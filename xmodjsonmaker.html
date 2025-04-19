@@ -5,81 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Item JSON Generator v6 - EvanBlokEnder</title>
   <style>
-    /* Styles for container and sections */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
     }
-
     .container {
       padding: 20px;
-      width: 80%;
+      max-width: 600px;
       margin: 0 auto;
     }
-
-    .section {
-      margin-bottom: 20px;
-    }
-
     h1 {
       text-align: center;
     }
-
-    label {
-      display: block;
-      margin-bottom: 5px;
+    .section {
+      margin-bottom: 15px;
     }
-
-    input[type="text"],
-    input[type="number"],
-    input[type="range"],
-    select {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-      font-size: 16px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      padding: 10px 20px;
-      margin: 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
     .credit {
       text-align: center;
       font-size: 12px;
+      color: #888;
     }
-
-    .mode-toggle {
-      margin-top: 20px;
-      text-align: center;
+    select, input, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
     }
-
-    /* Dark Mode Styles */
-    body.dark-mode {
-      background-color: #121212;
-      color: #ffffff;
+    .light {
+      background-color: #fff;
+      color: #000;
     }
-
-    body.dark-mode .section {
+    .dark {
       background-color: #333;
-      border-radius: 4px;
-    }
-
-    body.dark-mode input,
-    body.dark-mode select,
-    body.dark-mode button {
-      background-color: #444;
-      color: white;
+      color: #fff;
     }
   </style>
 </head>
-<body>
+<body class="light">
   <div class="container">
     <h1>Item JSON Generator v6</h1>
 
@@ -136,56 +98,64 @@
     <ul id="itemList" class="section"></ul>
 
     <p class="credit">Made by EvanBlokEnder</p>
-
-    <div class="mode-toggle">
-      <label for="modeToggle">
-        <input type="checkbox" id="modeToggle" onchange="toggleDarkMode()" />
-        Dark Mode
-      </label>
-    </div>
   </div>
 
   <script>
-    // Dark mode toggle function
-    function toggleDarkMode() {
-      const body = document.body;
-      body.classList.toggle('dark-mode');
+    // Fetch list.txt from GitHub and parse it
+    fetch('https://raw.githubusercontent.com/woostergames/woostergames.github.io/refs/heads/main/list.txt')
+      .then(response => response.text())
+      .then(data => {
+        const lines = data.split('\n');
+        const backpacks = [];
+        const items = [];
+
+        // Parse the text file and populate the arrays
+        lines.forEach(line => {
+          if (line.includes('Backpack:')) {
+            backpacks.push(line.replace('Backpack:', '').trim());
+          } else if (line.includes('Item:')) {
+            items.push(line.replace('Item:', '').trim());
+          }
+        });
+
+        // Populate the Backpack dropdown
+        const bagSelect = document.getElementById('bagSelect');
+        backpacks.forEach(backpack => {
+          const option = document.createElement('option');
+          option.value = backpack;
+          option.textContent = backpack;
+          bagSelect.appendChild(option);
+        });
+
+        // Populate the Item dropdown
+        const itemSelect = document.getElementById('itemSelect');
+        items.forEach(item => {
+          const option = document.createElement('option');
+          option.value = item;
+          option.textContent = item;
+          itemSelect.appendChild(option);
+        });
+      })
+      .catch(error => console.error('Error loading list.txt:', error));
+
+    // Functions to handle interactions (placeholders for now)
+    function addItem() {
+      console.log('Add Item functionality triggered');
     }
 
-    // Load options from list.txt hosted on GitHub and populate the select elements
-    function loadOptions() {
-      fetch('https://raw.githubusercontent.com/woostergames/woostergames.github.io/refs/heads/main/list.txt')
-        .then(response => response.text())
-        .then(data => {
-          // Assuming list.txt contains backpacks on one line and items on another
-          const lines = data.split('\n'); // Split by newline
-          const backpacks = lines[0].split(',');  // Assuming backpacks are comma-separated
-          const items = lines[1].split(',');  // Assuming items are comma-separated
-
-          // Populate Backpack select
-          const bagSelect = document.getElementById('bagSelect');
-          backpacks.forEach(backpack => {
-            const option = document.createElement('option');
-            option.value = backpack.trim();
-            option.textContent = backpack.trim();
-            bagSelect.appendChild(option);
-          });
-
-          // Populate Item select
-          const itemSelect = document.getElementById('itemSelect');
-          items.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.trim();
-            option.textContent = item.trim();
-            itemSelect.appendChild(option);
-          });
-        })
-        .catch(error => console.error('Error loading list.txt:', error));
+    function generateJSON() {
+      console.log('Generate JSON functionality triggered');
     }
 
-    // Call loadOptions when the page loads
-    window.onload = loadOptions;
+    function resetAll() {
+      console.log('Reset functionality triggered');
+    }
 
+    // Dark/Light Mode Toggle
+    document.body.addEventListener('click', () => {
+      const currentMode = document.body.className;
+      document.body.className = currentMode === 'light' ? 'dark' : 'light';
+    });
   </script>
 </body>
 </html>
