@@ -5,110 +5,77 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Item JSON Generator v6 - EvanBlokEnder</title>
   <style>
+    /* Styles for container and sections */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
-      color: #333;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      overflow-y: auto;
     }
 
     .container {
-      width: 85%; /* Reduced width to fit smaller screens */
-      max-width: 700px; /* Reduced max-width */
-      padding: 15px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      max-height: 85vh; /* Reduced max-height */
-      overflow-y: auto;
-    }
-
-    h1 {
-      font-size: 22px; /* Reduced font size */
-      margin-bottom: 15px;
+      padding: 20px;
+      width: 80%;
+      margin: 0 auto;
     }
 
     .section {
-      margin-bottom: 15px; /* Reduced spacing */
+      margin-bottom: 20px;
     }
 
-    select, input[type="range"], input[type="number"], input[type="text"] {
+    h1 {
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="range"],
+    select {
       width: 100%;
-      padding: 6px;
-      margin-top: 5px;
-      font-size: 14px; /* Smaller font size */
-      box-sizing: border-box;
+      padding: 8px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
     }
 
     button {
-      padding: 8px 18px;
-      margin: 5px;
-      font-size: 14px; /* Smaller font size */
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
       cursor: pointer;
-      width: 100%;
-    }
-
-    button:hover {
-      background-color: #ddd;
     }
 
     .credit {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #777;
-    }
-
-    .dark-mode {
-      background-color: #333;
-      color: #f4f4f4;
-    }
-
-    .dark-mode button {
-      background-color: #444;
-      color: #f4f4f4;
-    }
-
-    .dark-mode select, .dark-mode input[type="range"], .dark-mode input[type="number"], .dark-mode input[type="text"] {
-      background-color: #555;
-      color: #f4f4f4;
+      text-align: center;
+      font-size: 12px;
     }
 
     .mode-toggle {
       margin-top: 20px;
-      cursor: pointer;
-      font-size: 16px;
+      text-align: center;
     }
 
-    /* Ensure mobile responsiveness */
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 20px;
-      }
-
-      .section {
-        margin-bottom: 12px;
-      }
-
-      select, input[type="range"], input[type="number"], input[type="text"], button {
-        font-size: 13px;
-        padding: 5px;
-      }
-
-      button {
-        width: auto;
-      }
+    /* Dark Mode Styles */
+    body.dark-mode {
+      background-color: #121212;
+      color: #ffffff;
     }
 
-    /* Align dropdown */
-    .section select {
-      text-align: left;
+    body.dark-mode .section {
+      background-color: #333;
+      border-radius: 4px;
+    }
+
+    body.dark-mode input,
+    body.dark-mode select,
+    body.dark-mode button {
+      background-color: #444;
+      color: white;
     }
   </style>
 </head>
@@ -170,7 +137,6 @@
 
     <p class="credit">Made by EvanBlokEnder</p>
 
-    <!-- Dark Mode Toggle -->
     <div class="mode-toggle">
       <label for="modeToggle">
         <input type="checkbox" id="modeToggle" onchange="toggleDarkMode()" />
@@ -186,18 +152,40 @@
       body.classList.toggle('dark-mode');
     }
 
-    // Example function placeholders for actions
-    function addItem() {
-      // Your addItem logic here
+    // Load options from list.txt hosted on GitHub and populate the select elements
+    function loadOptions() {
+      fetch('https://raw.githubusercontent.com/woostergames/woostergames.github.io/refs/heads/main/list.txt')
+        .then(response => response.text())
+        .then(data => {
+          // Assuming list.txt contains backpacks on one line and items on another
+          const lines = data.split('\n'); // Split by newline
+          const backpacks = lines[0].split(',');  // Assuming backpacks are comma-separated
+          const items = lines[1].split(',');  // Assuming items are comma-separated
+
+          // Populate Backpack select
+          const bagSelect = document.getElementById('bagSelect');
+          backpacks.forEach(backpack => {
+            const option = document.createElement('option');
+            option.value = backpack.trim();
+            option.textContent = backpack.trim();
+            bagSelect.appendChild(option);
+          });
+
+          // Populate Item select
+          const itemSelect = document.getElementById('itemSelect');
+          items.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.trim();
+            option.textContent = item.trim();
+            itemSelect.appendChild(option);
+          });
+        })
+        .catch(error => console.error('Error loading list.txt:', error));
     }
 
-    function generateJSON() {
-      // Your generateJSON logic here
-    }
+    // Call loadOptions when the page loads
+    window.onload = loadOptions;
 
-    function resetAll() {
-      // Your resetAll logic here
-    }
   </script>
 </body>
 </html>
