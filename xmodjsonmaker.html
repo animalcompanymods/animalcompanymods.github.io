@@ -2,9 +2,115 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Item JSON Generator v6 - EvanBlokEnder</title>
-  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      overflow-y: auto;
+    }
+
+    .container {
+      width: 85%; /* Reduced width to fit smaller screens */
+      max-width: 700px; /* Reduced max-width */
+      padding: 15px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-height: 85vh; /* Reduced max-height */
+      overflow-y: auto;
+    }
+
+    h1 {
+      font-size: 22px; /* Reduced font size */
+      margin-bottom: 15px;
+    }
+
+    .section {
+      margin-bottom: 15px; /* Reduced spacing */
+    }
+
+    select, input[type="range"], input[type="number"], input[type="text"] {
+      width: 100%;
+      padding: 6px;
+      margin-top: 5px;
+      font-size: 14px; /* Smaller font size */
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 8px 18px;
+      margin: 5px;
+      font-size: 14px; /* Smaller font size */
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #ddd;
+    }
+
+    .credit {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #777;
+    }
+
+    .dark-mode {
+      background-color: #333;
+      color: #f4f4f4;
+    }
+
+    .dark-mode button {
+      background-color: #444;
+      color: #f4f4f4;
+    }
+
+    .dark-mode select, .dark-mode input[type="range"], .dark-mode input[type="number"], .dark-mode input[type="text"] {
+      background-color: #555;
+      color: #f4f4f4;
+    }
+
+    .mode-toggle {
+      margin-top: 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* Ensure mobile responsiveness */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 20px;
+      }
+
+      .section {
+        margin-bottom: 12px;
+      }
+
+      select, input[type="range"], input[type="number"], input[type="text"], button {
+        font-size: 13px;
+        padding: 5px;
+      }
+
+      button {
+        width: auto;
+      }
+    }
+
+    /* Align dropdown */
+    .section select {
+      text-align: left;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -22,7 +128,7 @@
 
     <div class="section">
       <label for="itemSelect">Select Item:</label>
-      <select id="itemSelect" size="10" style="width:100%;"></select>
+      <select id="itemSelect" size="10"></select>
     </div>
 
     <div class="section">
@@ -63,8 +169,35 @@
     <ul id="itemList" class="section"></ul>
 
     <p class="credit">Made by EvanBlokEnder</p>
+
+    <!-- Dark Mode Toggle -->
+    <div class="mode-toggle">
+      <label for="modeToggle">
+        <input type="checkbox" id="modeToggle" onchange="toggleDarkMode()" />
+        Dark Mode
+      </label>
+    </div>
   </div>
 
-  <script src="generator.js"></script>
+  <script>
+    // Dark mode toggle function
+    function toggleDarkMode() {
+      const body = document.body;
+      body.classList.toggle('dark-mode');
+    }
+
+    // Example function placeholders for actions
+    function addItem() {
+      // Your addItem logic here
+    }
+
+    function generateJSON() {
+      // Your generateJSON logic here
+    }
+
+    function resetAll() {
+      // Your resetAll logic here
+    }
+  </script>
 </body>
 </html>
