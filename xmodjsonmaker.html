@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Item JSON Generator v6 - EvanBlokEnder</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Item JSON Generator v6 - EvanBlokEnder</h1>
+
+    <label for="bagSelect">Select Backpack:</label>
+    <select id="bagSelect"></select>
+
+    <label for="itemSearch">Search Item:</label>
+    <input type="text" id="itemSearch" placeholder="Search item..."/>
+
+    <label for="itemSelect">Select Item:</label>
+    <select id="itemSelect"></select>
+
+    <div class="slider-section">
+      <label for="hue">Hue (0–210):</label>
+      <input type="range" id="hue" min="0" max="210" value="161"/>
+      <label><input type="checkbox" id="randomHue"/> Random</label>
+    </div>
+
+    <div class="slider-section">
+      <label for="sat">Saturation (0–120):</label>
+      <input type="range" id="sat" min="0" max="120" value="120"/>
+      <label><input type="checkbox" id="randomSat"/> Random</label>
+    </div>
+
+    <div class="slider-section">
+      <label for="size">Size (–128 to 127):</label>
+      <input type="range" id="size" min="-128" max="127" value="0"/>
+      <label><input type="checkbox" id="randomSize"/> Random</label>
+    </div>
+
+    <div class="slider-section">
+      <label for="state">Shredder State (Max 8000):</label>
+      <input type="number" id="state" max="8000" min="0" value="0"/>
+      <small class="warning">ONLY WORKS WITH SHREDDER</small>
+    </div>
+
+    <label for="count">Count:</label>
+    <input type="number" id="count" min="1" value="1"/>
+
+    <button onclick="addItem()">Add Item</button>
+    <ul id="itemList"></ul>
+    <button onclick="generateJSON()">Generate JSON</button>
+    <button onclick="resetAll()">Reset</button>
+
+    <p class="credit">Made by EvanBlokEnder</p>
+  </div>
+
+  <script src="generator.js"></script>
+</body>
+</html>
