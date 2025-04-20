@@ -1,1 +1,1 @@
-# WOOSTERGAMES (FOR GITHUB everything here is for educational purposes. these are to improve preformance of the game not hack it) ![image](https://github.com/user-attachments/assets/79913d2e-8d9d-43e6-bddb-502ca4f8ad99)
+# WOOSTERGAMES (FOR GITHUB everything here is for educational purposes. these are to improve performance of the game not hack it) ![image](https://github.com/user-attachments/assets/79913d2e-8d9d-43e6-bddb-502ca4f8ad99)
