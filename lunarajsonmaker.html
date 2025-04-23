@@ -77,6 +77,22 @@
         </div>
       </div>
     </div>
+   
+    <div class="form-field" id="shredderStateSection" style="display: none;">
+  <label>Shredder State (0 - 8000): <small>(only works for item_shredder)</small></label>
+  <div class="input-row">
+    <div class="input-container slider-container">
+      <input type="range" id="shredderState" min="0" max="8000" value="8000" class="slider-input">
+      <div class="slider-value-display">
+        <input type="number" id="shredderStateValue" value="8000" min="0" max="8000">
+      </div>
+    </div>
+    <div class="random-container">
+      <input type="checkbox" id="randomShredderState" />
+      <label for="randomShredderState">Random</label>
+    </div>
+  </div>
+</div>
     
     <div class="form-field">
       <label>Saturation (0-120):</label>
