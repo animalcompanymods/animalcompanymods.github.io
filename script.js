@@ -97,12 +97,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  
   setupRandomOptionVisibility("randomHue", "randomHueToggleWrap");
   setupRandomOptionVisibility("randomSaturation", "randomSaturationToggleWrap");
   setupRandomOptionVisibility("randomSize", "randomSizeToggleWrap");
 
   updateItemSelect();
+
+  // —— Shredder State: show/hide the input when item_shredder is selected
+  document.getElementById("itemSelect").addEventListener("change", function () {
+    const stateSection = document.getElementById("shredderStateSection");
+    if (this.value === "item_shredder") {
+      stateSection.style.display = "block";
+    } else {
+      stateSection.style.display = "none";
+    }
+  });
 });
 
 function setupRandomOptionVisibility(checkboxId, toggleWrapperId) {
@@ -133,11 +142,7 @@ function toggleAdvancedMode() {
   }
   
   document.querySelectorAll('.item-id').forEach(el => {
-    if (advancedMode) {
-      el.classList.add('visible');
-    } else {
-      el.classList.remove('visible');
-    }
+    el.classList.toggle('visible', advancedMode);
   });
 }
 
@@ -206,14 +211,11 @@ function handleSearch() {
 
 function filterInventoryTree(searchText) {
   const treeItems = document.querySelectorAll('#inventoryTree li');
-  
   treeItems.forEach(item => {
     const itemName = item.getAttribute('data-name').toLowerCase();
     const itemId = item.getAttribute('data-item-id').toLowerCase();
-    
     if (!searchText || itemName.includes(searchText) || itemId.includes(searchText)) {
       item.classList.remove('hidden');
-      
       let parent = item.parentElement;
       while (parent && parent.classList.contains('child-items')) {
         parent.classList.add('expanded');
@@ -222,12 +224,7 @@ function filterInventoryTree(searchText) {
     } else {
       const hasVisibleChildren = Array.from(item.querySelectorAll('li'))
         .some(child => !child.classList.contains('hidden'));
-      
-      if (!hasVisibleChildren) {
-        item.classList.add('hidden');
-      } else {
-        item.classList.remove('hidden');
-      }
+      item.classList.toggle('hidden', !hasVisibleChildren);
     }
   });
 }
@@ -238,11 +235,9 @@ function addItemToInventory() {
   const containerID = selectedContainerId;
 
   const galaxyMode = document.getElementById("galaxyMode").checked;
-
   const randomHue = document.getElementById("randomHue").checked;
   const randomSaturation = document.getElementById("randomSaturation").checked;
   const randomSize = document.getElementById("randomSize").checked;
-
   const sameRandomHue = document.getElementById("sameRandomHue").checked;
   const sameRandomSaturation = document.getElementById("sameRandomSaturation").checked;
   const sameRandomSize = document.getElementById("sameRandomSize").checked;
@@ -290,6 +285,15 @@ function addItemToInventory() {
       count: 1
     };
 
+    // —— Shredder State inclusion
+    if (itemID === "item_shredder") {
+      const shredderStateInput = document.getElementById("shredderState");
+      if (shredderStateInput) {
+        const stateVal = parseInt(shredderStateInput.value);
+        newItem.state = Math.min(Math.max(stateVal, 0), 8000);
+      }
+    }
+
     if (containerID === 'root') {
       const existingItem = findExistingItem(inventory.items, newItem);
       if (existingItem) {
@@ -304,6 +308,7 @@ function addItemToInventory() {
 
   updateInventoryTree();
 }
+
 
 function findExistingItem(items, newItem) {
   return items.find(item => 
