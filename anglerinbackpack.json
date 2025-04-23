@@ -1,0 +1,13 @@
+{
+  "leftHand": {
+    "itemID": "item_backpack",
+    "children": [
+      {
+        "itemID": "item_backpack",
+        "colorHue": 161,
+        "colorSaturation": 120,
+        "scaleModifier": 0
+      }
+    ]
+  }
+}
