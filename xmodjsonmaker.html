@@ -100,6 +100,10 @@
       <input type="text" id="count" value="1" />
     </div>
 
+    <div class="section">
+      <label><input type="checkbox" id="heartGunCheckbox" /> Use Heart Gun (new bypass)</label>
+    </div>
+
     <button onclick="addItem()">➕ Add Item</button>
     <div id="itemList"></div>
     <button onclick="generateJSON()">💾 Generate JSON</button>
@@ -113,6 +117,7 @@
     const bagSelect = document.getElementById("bagSelect");
     const itemSelect = document.getElementById("itemSelect");
     const itemSearch = document.getElementById("itemSearch");
+    const heartGunCheckbox = document.getElementById("heartGunCheckbox");
     let items = [];
     let itemData = [];
 
@@ -151,13 +156,28 @@
       const randHue = document.getElementById("randomHue").checked;
       const randSat = document.getElementById("randomSat").checked;
       const randSize = document.getElementById("randomSize").checked;
+
+      const useHeartGun = heartGunCheckbox.checked;
+      const heartGunID = "item_heart_gun"; // Define the Heart Gun ID
+
       for (let i = 0; i < count; i++) {
         const hue = randHue ? getRandom(0, 210) : parseInt(document.getElementById("hue").value);
         const sat = randSat ? getRandom(0, 120) : parseInt(document.getElementById("sat").value);
         const size = randSize ? getRandom(-128, 127) : parseInt(document.getElementById("size").value);
+        
         const itm = { itemID: selectedItem, colorHue: hue, colorSaturation: sat, scaleModifier: size };
         if (state === "8000") itm.state = 8000;
+
+        // If using Heart Gun, make the item a child of it
+        if (useHeartGun) {
+          itm.children = [{
+            itemID: heartGunID,
+            children: [itm]
+          }];
+        }
+
         itemData.push(itm);
+
         const msg = `${selectedItem} — Hue:${hue} Sat:${sat} Size:${size}${state === "8000" ? " (Shredder State)" : ""}`;
         const div = document.createElement("div");
         div.textContent = msg;
@@ -167,12 +187,14 @@
 
     function generateJSON() {
       if (!itemData.length) return alert("Add items first!");
+      
       const data = {
         leftHand: {
           itemID: bagSelect.value,
           children: itemData
         }
       };
+
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -190,6 +212,7 @@
       document.getElementById("randomHue").checked = false;
       document.getElementById("randomSat").checked = false;
       document.getElementById("randomSize").checked = false;
+      heartGunCheckbox.checked = false;
       itemData = [];
       itemList.innerHTML = "";
     }
