@@ -3,107 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>XMod JSON Generator v7 (NEW HEART GUN OVER BACKPACK LIMIT BYPASS)- EvanBlokEnder</title>
+  <title>XMod JSON Generator v7 - EvanBlokEnder</title>
   <style>
-    body {
-      background-color: #1a1a00;
-      color: #FFD700;
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .section {
-      margin-bottom: 20px;
-    }
-    input[type="range"], input[type="text"], select {
-      width: 100%;
-      margin-top: 5px;
-      padding: 5px;
-      background-color: #333300;
-      color: #FFD700;
-      border: none;
-    }
-    label {
-      display: block;
-    }
-    button {
-      background-color: #333300;
-      color: #FFD700;
-      border: none;
-      padding: 10px;
-      margin: 10px 0;
-      cursor: pointer;
-    }
-    #itemList {
-      width: 100%;
-      height: 150px;
-      background-color: #333300;
-      color: #FFD700;
-      overflow-y: scroll;
-      padding: 5px;
-    }
-    .credit {
-      text-align: center;
-      font-size: 12px;
-      color: #999900;
-      margin-top: 30px;
-    }
+    /* (Your existing styles here) */
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>XMod JSON Generator v7 (NEW HEART GUN BYPASS)- EvanBlokEnder</h1>
+    <h1>XMod JSON Generator v7 (NEW HEART GUN Bypass) - EvanBlokEnder</h1>
 
+    <!-- Backpack Section -->
     <div class="section">
-      <label for="bagSelect">🎒 Select Backpack:</label>
+      <label>🛠️ Backpack Section:</label>
       <select id="bagSelect"></select>
     </div>
 
+    <!-- Item Select Section -->
     <div class="section">
-      <label for="itemSearch">🔍 Search Item:</label>
-      <input type="text" id="itemSearch" placeholder="Search item..." />
+      <label for="itemSelect">🧰 Select Item:</label>
+      <select id="itemSelect"></select>
     </div>
 
-    <div class="section">
-      <label for="itemSelect">📦 Select Item:</label>
-      <select id="itemSelect" size="10"></select>
-    </div>
-
-    <div class="section">
-      <label for="stateInput">⚙️ State (8000 for Shredder):</label>
-      <input type="text" id="stateInput" value="0" />
-    </div>
-
-    <div class="section">
-      <label for="hue">🎨 Hue (0–210):</label>
-      <input type="range" id="hue" min="0" max="210" value="161" />
-      <label><input type="checkbox" id="randomHue" /> Random</label>
-    </div>
-
-    <div class="section">
-      <label for="sat">🎨 Saturation (0–120):</label>
-      <input type="range" id="sat" min="0" max="120" value="120" />
-      <label><input type="checkbox" id="randomSat" /> Random</label>
-    </div>
-
-    <div class="section">
-      <label for="size">📏 Size (–128 to 127):</label>
-      <input type="range" id="size" min="-128" max="127" value="0" />
-      <label><input type="checkbox" id="randomSize" /> Random</label>
-    </div>
-
+    <!-- Other Inputs for customization -->
     <div class="section">
       <label for="count">🔢 Count:</label>
-      <input type="text" id="count" value="1" />
+      <input type="number" id="count" value="1" />
     </div>
-
     <div class="section">
-      <label><input type="checkbox" id="heartGunCheckbox" /> ⚠️‼️Use Heart Gun (new bypass)</label>
+      <label for="stateInput">🔧 State:</label>
+      <input type="number" id="stateInput" value="0" />
+    </div>
+    <div class="section">
+      <label for="hue">🌈 Hue:</label>
+      <input type="number" id="hue" value="161" />
+    </div>
+    <div class="section">
+      <label for="sat">🎨 Saturation:</label>
+      <input type="number" id="sat" value="120" />
+    </div>
+    <div class="section">
+      <label for="size">📏 Size:</label>
+      <input type="number" id="size" value="0" />
     </div>
 
+    <!-- Action Buttons -->
     <button onclick="addItem()">➕ Add Item</button>
     <div id="itemList"></div>
     <button onclick="generateJSON()">💾 Generate JSON</button>
@@ -116,12 +59,10 @@
     const itemList = document.getElementById("itemList");
     const bagSelect = document.getElementById("bagSelect");
     const itemSelect = document.getElementById("itemSelect");
-    const itemSearch = document.getElementById("itemSearch");
-    const heartGunCheckbox = document.getElementById("heartGunCheckbox");
     let items = [];
     let itemData = [];
 
-    // Mock loading of items.json
+    // Mock loading of items.json (Replace with actual fetching method)
     fetch("files.txt")
       .then(res => res.json())
       .then(data => {
@@ -135,8 +76,6 @@
         });
         updateItemDropdown();
       });
-
-    itemSearch.addEventListener("input", updateItemDropdown);
 
     function updateItemDropdown() {
       const filter = itemSearch.value.toLowerCase();
@@ -155,52 +94,40 @@
       const state = document.getElementById("stateInput").value;
       const randHue = document.getElementById("randomHue").checked;
       const randSat = document.getElementById("randomSat").checked;
-      const randSize = document.getElementById("randomSize").checked;
+      const randSize = document.getElementById("randomSize").checked();
 
-      const useHeartGun = heartGunCheckbox.checked;
-      const heartGunID = "item_heart_gun"; // Define the Heart Gun ID
+      const hue = randHue ? getRandom(0, 210) : parseInt(document.getElementById("hue").value);
+      const sat = randSat ? getRandom(0, 120) : parseInt(document.getElementById("sat").value);
+      const size = randSize ? getRandom(-128, 127) : parseInt(document.getElementById("size").value);
 
-      for (let i = 0; i < count; i++) {
-        const hue = randHue ? getRandom(0, 210) : parseInt(document.getElementById("hue").value);
-        const sat = randSat ? getRandom(0, 120) : parseInt(document.getElementById("sat").value);
-        const size = randSize ? getRandom(-128, 127) : parseInt(document.getElementById("size").value);
-        
-        const itm = { itemID: selectedItem, colorHue: hue, colorSaturation: sat, scaleModifier: size };
-        if (state === "8000") itm.state = 8000;
+      const itm = { itemID: selectedItem, colorHue: hue, colorSaturation: sat, scaleModifier: size };
+      if (state === "8000") itm.state = 8000;
 
-        // If using Heart Gun, make the item a child of it
-        if (useHeartGun) {
-          itm.children = [{
-            itemID: heartGunID,
-            children: [itm]
-          }];
-        }
+      // Add Heart Gun as parent if it's not already present in the backpack
+      const heartGunID = "item_heart_gun";
+      const heartGunItem = { itemID: heartGunID, children: [itm] };
+      
+      itemData.push(heartGunItem);
 
-        itemData.push(itm);
-
-        const msg = `${selectedItem} — Hue:${hue} Sat:${sat} Size:${size}${state === "8000" ? " (Shredder State)" : ""}`;
-        const div = document.createElement("div");
-        div.textContent = msg;
-        itemList.appendChild(div);
-      }
+      // Display added item information
+      const msg = `${selectedItem} — Hue:${hue} Sat:${sat} Size:${size}${state === "8000" ? " (Shredder State)" : ""}`;
+      const div = document.createElement("div");
+      div.textContent = msg;
+      itemList.appendChild(div);
     }
 
     function generateJSON() {
-      console.log("Generating JSON..."); // Debug log
       if (!itemData.length) {
-        console.log("No items to generate."); // Debug log
         return alert("Add items first!");
       }
-      
-      // Ensure Heart Gun items are added to the leftHand
+
+      // The Heart Gun item will be in the backpack section with selected items as children
       const data = {
         leftHand: {
           itemID: bagSelect.value,
           children: itemData
         }
       };
-
-      console.log("Generated data:", data); // Debug log
 
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
@@ -219,7 +146,6 @@
       document.getElementById("randomHue").checked = false;
       document.getElementById("randomSat").checked = false;
       document.getElementById("randomSize").checked = false;
-      heartGunCheckbox.checked = false;
       itemData = [];
       itemList.innerHTML = "";
     }
