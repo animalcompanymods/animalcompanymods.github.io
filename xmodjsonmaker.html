@@ -97,7 +97,7 @@
     </div>
 
     <div class="section">
-      <label for="count">🔢 Count:</label>
+      <label for="count">🔢 Count (Max 250):</label>
       <input type="text" id="count" value="1" />
     </div>
 
@@ -147,7 +147,9 @@
 
     function addItem() {
       const selectedItem = itemSelect.value;
-      const count = parseInt(document.getElementById("count").value) || 1;
+      let count = parseInt(document.getElementById("count").value) || 1;
+      if (count > 250) count = 250; // Max 250 items
+
       const state = parseInt(document.getElementById("stateInput").value) || 0;
       const randHue = document.getElementById("randomHue").checked;
       const randSat = document.getElementById("randomSat").checked;
@@ -169,7 +171,6 @@
           baseItem.state = Math.min(state, 8000);
         }
 
-        // Always wrap in a Heart Gun
         let wrappedItem = {
           itemID: "item_heart_gun",
           children: [baseItem]
