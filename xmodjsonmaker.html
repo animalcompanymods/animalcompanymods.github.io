@@ -100,10 +100,6 @@
       <input type="text" id="count" value="1" />
     </div>
 
-    <div class="section">
-      <label><input type="checkbox" id="heartGunCheckbox" /> ⚠️‼️Use Heart Gun (new bypass)</label>
-    </div>
-
     <button onclick="addItem()">➕ Add Item</button>
     <div id="itemList"></div>
     <button onclick="generateJSON()">💾 Generate JSON</button>
@@ -117,7 +113,6 @@
     const bagSelect = document.getElementById("bagSelect");
     const itemSelect = document.getElementById("itemSelect");
     const itemSearch = document.getElementById("itemSearch");
-    const heartGunCheckbox = document.getElementById("heartGunCheckbox");
     let items = [];
     let itemData = [];
 
@@ -127,7 +122,9 @@
       .then(data => {
         items = data;
         const bags = items.filter(i => i.id.startsWith("item_backpack"));
-        bags.forEach(b => {
+        const heartGuns = items.filter(i => i.id === "item_heart_gun");
+        // Add both backpacks and heart guns to the bag select dropdown
+        [...bags, ...heartGuns].forEach(b => {
           const option = document.createElement("option");
           option.value = b.id;
           option.textContent = b.id;
@@ -157,23 +154,17 @@
       const randSat = document.getElementById("randomSat").checked;
       const randSize = document.getElementById("randomSize").checked;
 
-      const useHeartGun = heartGunCheckbox.checked;
-      const heartGunID = "item_heart_gun"; // Define the Heart Gun ID
-
       for (let i = 0; i < count; i++) {
         const hue = randHue ? getRandom(0, 210) : parseInt(document.getElementById("hue").value);
         const sat = randSat ? getRandom(0, 120) : parseInt(document.getElementById("sat").value);
         const size = randSize ? getRandom(-128, 127) : parseInt(document.getElementById("size").value);
-        
+
         const itm = { itemID: selectedItem, colorHue: hue, colorSaturation: sat, scaleModifier: size };
         if (state === "8000") itm.state = 8000;
 
-        // If using Heart Gun, make the item a child of it
-        if (useHeartGun) {
-          itm.children = [{
-            itemID: heartGunID,
-            children: [itm]
-          }];
+        // If the item is a heart gun, make it a parent
+        if (selectedItem === "item_heart_gun") {
+          itm.children = [itm]; // Wrap it in a children array to make it a parent item
         }
 
         itemData.push(itm);
@@ -219,7 +210,6 @@
       document.getElementById("randomHue").checked = false;
       document.getElementById("randomSat").checked = false;
       document.getElementById("randomSize").checked = false;
-      heartGunCheckbox.checked = false;
       itemData = [];
       itemList.innerHTML = "";
     }
