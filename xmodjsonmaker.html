@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>XMod JSON Generator v7 (NEW HEART GUN OVER BACKPACK LIMIT BYPASS)- EvanBlokEnder</title>
+  <title>XMod JSON Generator v7 (HEART GUN NESTING) - EvanBlokEnder</title>
+
   <style>
     body {
       background-color: #1a1a00;
@@ -55,7 +56,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>XMod JSON Generator v7 (NEW HEART GUN BYPASS)- EvanBlokEnder</h1>
+    <h1>XMod JSON Generator v7 (HEART GUN NESTING) - EvanBlokEnder</h1>
 
     <div class="section">
       <label for="bagSelect">🎒 Select Backpack:</label>
@@ -116,14 +117,12 @@
     let items = [];
     let itemData = [];
 
-    // Mock loading of items.json
     fetch("files.txt")
       .then(res => res.json())
       .then(data => {
         items = data;
         const bags = items.filter(i => i.id.startsWith("item_backpack"));
         const heartGuns = items.filter(i => i.id === "item_heart_gun");
-        // Add both backpacks and heart guns to the bag select dropdown
         [...bags, ...heartGuns].forEach(b => {
           const option = document.createElement("option");
           option.value = b.id;
@@ -148,8 +147,8 @@
 
     function addItem() {
       const selectedItem = itemSelect.value;
-      const count = parseInt(document.getElementById("count").value);
-      const state = document.getElementById("stateInput").value;
+      const count = parseInt(document.getElementById("count").value) || 1;
+      const state = parseInt(document.getElementById("stateInput").value) || 0;
       const randHue = document.getElementById("randomHue").checked;
       const randSat = document.getElementById("randomSat").checked;
       const randSize = document.getElementById("randomSize").checked;
@@ -159,39 +158,42 @@
         const sat = randSat ? getRandom(0, 120) : parseInt(document.getElementById("sat").value);
         const size = randSize ? getRandom(-128, 127) : parseInt(document.getElementById("size").value);
 
-        const itm = { itemID: selectedItem, colorHue: hue, colorSaturation: sat, scaleModifier: size };
-        if (state === "8000") itm.state = 8000;
+        let baseItem = {
+          itemID: selectedItem,
+          colorHue: hue,
+          colorSaturation: sat,
+          scaleModifier: size
+        };
 
-        // If the item is a heart gun, make it a parent
-        if (selectedItem === "item_heart_gun") {
-          itm.children = [itm]; // Wrap it in a children array to make it a parent item
+        if (selectedItem === "item_shredder" && state > 0) {
+          baseItem.state = Math.min(state, 8000);
         }
 
-        itemData.push(itm);
+        // Always wrap in a Heart Gun
+        let wrappedItem = {
+          itemID: "item_heart_gun",
+          children: [baseItem]
+        };
 
-        const msg = `${selectedItem} — Hue:${hue} Sat:${sat} Size:${size}${state === "8000" ? " (Shredder State)" : ""}`;
+        itemData.push(wrappedItem);
+
         const div = document.createElement("div");
-        div.textContent = msg;
+        div.textContent = `Wrapped in Heart Gun -> ${selectedItem} — Hue:${hue} Sat:${sat} Size:${size}${state > 0 ? " (State:" + state + ")" : ""}`;
         itemList.appendChild(div);
       }
     }
 
     function generateJSON() {
-      console.log("Generating JSON..."); // Debug log
       if (!itemData.length) {
-        console.log("No items to generate."); // Debug log
         return alert("Add items first!");
       }
-      
-      // Ensure Heart Gun items are added to the leftHand
+
       const data = {
         leftHand: {
           itemID: bagSelect.value,
           children: itemData
         }
       };
-
-      console.log("Generated data:", data); // Debug log
 
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
