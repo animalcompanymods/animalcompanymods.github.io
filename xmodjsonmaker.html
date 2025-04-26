@@ -186,7 +186,11 @@
     }
 
     function generateJSON() {
-      if (!itemData.length) return alert("Add items first!");
+      console.log("Generating JSON..."); // Debug log
+      if (!itemData.length) {
+        console.log("No items to generate."); // Debug log
+        return alert("Add items first!");
+      }
       
       const data = {
         leftHand: {
@@ -194,6 +198,8 @@
           children: itemData
         }
       };
+
+      console.log("Generated data:", data); // Debug log
 
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
