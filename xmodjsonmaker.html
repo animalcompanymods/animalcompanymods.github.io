@@ -74,8 +74,8 @@
     </div>
 
     <div class="section">
-      <label for="state">⚙️ State (8000 for Shredder):</label>
-      <input type="text" id="state" value="0" />
+      <label for="stateInput">⚙️ State (8000 for Shredder):</label>
+      <input type="text" id="stateInput" value="0" />
     </div>
 
     <div class="section">
@@ -102,13 +102,123 @@
     </div>
 
     <button onclick="addItem()">➕ Add Item</button>
-    <ul id="itemList"></ul>
+    <div id="itemList"></div>
     <button onclick="generateJSON()">💾 Generate JSON</button>
-    <button onclick="resetAll()">♻️ Reset</button>
+    <button onclick="resetFields()">♻️ Reset</button>
 
     <div class="credit">Made by EvanBlokEnder</div>
   </div>
 
-  <script src="generator.js"></script>
+  <script>
+    const itemList = document.getElementById("itemList");
+    const bagSelect = document.getElementById("bagSelect");
+    const itemSelect = document.getElementById("itemSelect");
+    const itemSearch = document.getElementById("itemSearch");
+    let items = [];
+    let itemData = [];
+
+    fetch("files.txt")
+      .then(res => res.json())
+      .then(data => {
+        items = data;
+        const bags = items.filter(i => i.id.startsWith("item_backpack"));
+        const heartGuns = items.filter(i => i.id === "item_heart_gun");
+        [...bags, ...heartGuns].forEach(b => {
+          const option = document.createElement("option");
+          option.value = b.id;
+          option.textContent = b.id;
+          bagSelect.appendChild(option);
+        });
+        updateItemDropdown();
+      });
+
+    itemSearch.addEventListener("input", updateItemDropdown);
+
+    function updateItemDropdown() {
+      const filter = itemSearch.value.toLowerCase();
+      itemSelect.innerHTML = "";
+      items.filter(i => i.id.toLowerCase().includes(filter)).forEach(i => {
+        const option = document.createElement("option");
+        option.value = i.id;
+        option.textContent = i.id;
+        itemSelect.appendChild(option);
+      });
+    }
+
+    function addItem() {
+      const selectedItem = itemSelect.value;
+      const count = parseInt(document.getElementById("count").value) || 1;
+      const state = parseInt(document.getElementById("stateInput").value) || 0;
+      const randHue = document.getElementById("randomHue").checked;
+      const randSat = document.getElementById("randomSat").checked;
+      const randSize = document.getElementById("randomSize").checked;
+
+      for (let i = 0; i < count; i++) {
+        const hue = randHue ? getRandom(0, 210) : parseInt(document.getElementById("hue").value);
+        const sat = randSat ? getRandom(0, 120) : parseInt(document.getElementById("sat").value);
+        const size = randSize ? getRandom(-128, 127) : parseInt(document.getElementById("size").value);
+
+        let baseItem = {
+          itemID: selectedItem,
+          colorHue: hue,
+          colorSaturation: sat,
+          scaleModifier: size
+        };
+
+        if (selectedItem === "item_shredder" && state > 0) {
+          baseItem.state = Math.min(state, 8000);
+        }
+
+        // Always wrap in a Heart Gun
+        let wrappedItem = {
+          itemID: "item_heart_gun",
+          children: [baseItem]
+        };
+
+        itemData.push(wrappedItem);
+
+        const div = document.createElement("div");
+        div.textContent = `Wrapped in Heart Gun -> ${selectedItem} — Hue:${hue} Sat:${sat} Size:${size}${state > 0 ? " (State:" + state + ")" : ""}`;
+        itemList.appendChild(div);
+      }
+    }
+
+    function generateJSON() {
+      if (!itemData.length) {
+        return alert("Add items first!");
+      }
+
+      const data = {
+        leftHand: {
+          itemID: bagSelect.value,
+          children: itemData
+        }
+      };
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${bagSelect.value}_${itemData.length}.json`;
+      a.click();
+    }
+
+    function resetFields() {
+      document.getElementById("count").value = 1;
+      document.getElementById("stateInput").value = "0";
+      document.getElementById("hue").value = 161;
+      document.getElementById("sat").value = 120;
+      document.getElementById("size").value = 0;
+      document.getElementById("randomHue").checked = false;
+      document.getElementById("randomSat").checked = false;
+      document.getElementById("randomSize").checked = false;
+      itemData = [];
+      itemList.innerHTML = "";
+    }
+
+    function getRandom(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+  </script>
 </body>
 </html>
