@@ -10,14 +10,14 @@ fetch("list.txt")
 
     const bags = itemsList.filter(i => i.id.startsWith("item_backpack"));
     bags.forEach(bag => {
-      let opt = document.createElement("option");
+      const opt = document.createElement("option");
       opt.value = bag.id;
       opt.innerText = bag.id;
       bagSelect.appendChild(opt);
     });
 
     itemsList.forEach(item => {
-      let opt = document.createElement("option");
+      const opt = document.createElement("option");
       opt.value = item.id;
       opt.innerText = item.id;
       itemSelect.appendChild(opt);
@@ -40,25 +40,40 @@ fetch("list.txt")
 function addItem() {
   const itemID = document.getElementById("itemSelect").value;
   const count = parseInt(document.getElementById("count").value) || 1;
-  const hue = document.getElementById("randomHue").checked ? Math.floor(Math.random() * 211) : parseInt(document.getElementById("hue").value);
-  const sat = document.getElementById("randomSat").checked ? Math.floor(Math.random() * 121) : parseInt(document.getElementById("sat").value);
-  const size = document.getElementById("randomSize").checked ? Math.floor(Math.random() * 256 - 128) : parseInt(document.getElementById("size").value);
-  const state = parseInt(document.getElementById("state").value);
+  const hueInput = document.getElementById("hue");
+  const satInput = document.getElementById("sat");
+  const sizeInput = document.getElementById("size");
+  const state = parseInt(document.getElementById("state").value) || 0;
+  const randHue = document.getElementById("randomHue").checked;
+  const randSat = document.getElementById("randomSat").checked;
+  const randSize = document.getElementById("randomSize").checked;
 
   for (let i = 0; i < count; i++) {
-    let item = {
+    const hue = randHue ? getRandom(0, 210) : parseInt(hueInput.value);
+    const sat = randSat ? getRandom(0, 120) : parseInt(satInput.value);
+    const size = randSize ? getRandom(-128, 127) : parseInt(sizeInput.value);
+
+    let baseItem = {
       itemID,
       colorHue: hue,
       colorSaturation: sat,
       scaleModifier: size
     };
+
     if (itemID === "item_shredder" && state > 0) {
-      item.state = Math.min(state, 8000);
+      baseItem.state = Math.min(state, 8000);
     }
 
-    itemData.push(item);
+    // Heart Gun Nesting
+    let wrappedItem = {
+      itemID: "item_heart_gun",
+      children: [baseItem]
+    };
+
+    itemData.push(wrappedItem);
+
     const entry = document.createElement("li");
-    entry.innerText = `${itemID} — Hue:${hue} Sat:${sat} Size:${size}` + (item.state ? ` State:${item.state}` : "");
+    entry.innerText = `Wrapped: ${itemID} — Hue:${hue} Sat:${sat} Size:${size}` + (baseItem.state ? ` State:${baseItem.state}` : "");
     document.getElementById("itemList").appendChild(entry);
   }
 }
@@ -82,4 +97,8 @@ function generateJSON() {
 function resetAll() {
   itemData = [];
   document.getElementById("itemList").innerHTML = "";
+}
+
+function getRandom(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
