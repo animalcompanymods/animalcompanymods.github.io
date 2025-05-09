@@ -3,120 +3,543 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>XMod JSON Generator v7 (HEART GUN NESTING) - EvanBlokEnder</title>
+  <title>XMod JSON Generator v8 (HEART GUN NESTING) - EvanBlokEnder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
+    :root {
+      --primary: #FFD700;
+      --secondary: #1a1a00;
+      --accent: #999900;
+      --dark: #0d0d00;
+      --light: #333300;
+      --error: #ff3333;
+    }
+    
     body {
-      background-color: #1a1a00;
-      color: #FFD700;
-      font-family: Arial, sans-serif;
+      background-color: var(--secondary);
+      color: var(--primary);
+      font-family: 'Roboto', sans-serif;
       padding: 20px;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 215, 0, 0.05) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(255, 215, 0, 0.05) 0%, transparent 20%);
     }
+    
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
+      position: relative;
+      background-color: rgba(13, 13, 0, 0.8);
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+      border: 1px solid var(--accent);
     }
+    
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--primary);
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+      position: relative;
+    }
+    
+    h1::after {
+      content: "";
+      display: block;
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      margin: 10px auto;
+    }
+    
     .section {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      position: relative;
+      transition: all 0.3s ease;
     }
-    input[type="range"], input[type="text"], select {
-      width: 100%;
-      margin-top: 5px;
-      padding: 5px;
-      background-color: #333300;
-      color: #FFD700;
-      border: none;
+    
+    .section:hover {
+      transform: translateY(-3px);
     }
+    
     label {
       display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: var(--accent);
     }
-    button {
-      background-color: #333300;
-      color: #FFD700;
-      border: none;
-      padding: 10px;
-      margin: 10px 0;
+    
+    input[type="range"], 
+    input[type="text"], 
+    select {
+      width: 100%;
+      margin-top: 5px;
+      padding: 12px;
+      background-color: var(--light);
+      color: var(--primary);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    input[type="range"] {
+      -webkit-appearance: none;
+      height: 8px;
+      padding: 0;
+      background: var(--light);
+      border-radius: 4px;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--primary);
+      border-radius: 50%;
       cursor: pointer;
+      transition: all 0.2s;
     }
+    
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      background: var(--accent);
+    }
+    
+    input[type="text"]:focus, 
+    select:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--accent);
+      border-color: var(--primary);
+    }
+    
+    button {
+      background-color: var(--light);
+      color: var(--primary);
+      border: 1px solid var(--accent);
+      padding: 12px 20px;
+      margin: 10px 5px;
+      cursor: pointer;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    button:hover {
+      background-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(153, 153, 0, 0.3);
+    }
+    
+    button i {
+      margin-right: 8px;
+    }
+    
     #itemList {
       width: 100%;
-      height: 150px;
-      background-color: #333300;
-      color: #FFD700;
+      height: 200px;
+      background-color: var(--light);
+      color: var(--primary);
       overflow-y: scroll;
-      padding: 5px;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      margin: 15px 0;
     }
+    
+    #itemList div {
+      padding: 8px;
+      margin: 5px 0;
+      background-color: rgba(51, 51, 0, 0.5);
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    
+    #itemList div:hover {
+      background-color: var(--accent);
+      transform: translateX(5px);
+    }
+    
     .credit {
       text-align: center;
-      font-size: 12px;
-      color: #999900;
+      font-size: 14px;
+      color: var(--accent);
       margin-top: 30px;
+      opacity: 0.8;
+    }
+    
+    .animal {
+      position: absolute;
+      font-size: 24px;
+      z-index: 10;
+      animation: float 6s ease-in-out infinite;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .animal:hover {
+      transform: scale(1.5);
+      animation-play-state: paused;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+    
+    /* Terminal styles */
+    .terminal-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--light);
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      transition: all 0.3s;
+    }
+    
+    .terminal-btn:hover {
+      transform: scale(1.1) rotate(15deg);
+      background: var(--accent);
+    }
+    
+    .terminal {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      width: 400px;
+      height: 300px;
+      background: rgba(13, 13, 0, 0.95);
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      z-index: 99;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    }
+    
+    .terminal-header {
+      background: var(--dark);
+      padding: 8px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--accent);
+    }
+    
+    .terminal-title {
+      font-weight: bold;
+      color: var(--primary);
+    }
+    
+    .terminal-close {
+      cursor: pointer;
+      color: var(--primary);
+    }
+    
+    .terminal-body {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      color: var(--primary);
+    }
+    
+    .terminal-input {
+      display: flex;
+      padding: 10px;
+      background: var(--dark);
+      border-top: 1px solid var(--accent);
+    }
+    
+    .terminal-prompt {
+      color: var(--accent);
+      margin-right: 10px;
+    }
+    
+    #terminalCmd {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--primary);
+      font-family: 'Courier New', monospace;
+    }
+    
+    #terminalCmd:focus {
+      outline: none;
+    }
+    
+    .admin-banner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--error);
+      color: white;
+      padding: 10px;
+      text-align: center;
+      z-index: 1000;
+      display: none;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .terminal {
+        width: calc(100% - 40px);
+        right: 20px;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="admin-banner" id="adminBanner"></div>
+  
   <div class="container">
-    <h1>XMod JSON Generator v7 (HEART GUN NESTING) - EvanBlokEnder</h1>
+    <h1>XMod JSON Generator v8 <span class="version-badge">PRO</span></h1>
+
+    <!-- Animal decorations -->
+    <div class="animal" style="top: 20px; left: 20px;">🦊</div>
+    <div class="animal" style="top: 80px; right: 30px;">🐺</div>
+    <div class="animal" style="bottom: 100px; left: 40px;">🐻</div>
+    <div class="animal" style="bottom: 150px; right: 50px;">🦉</div>
 
     <div class="section">
-      <label for="bagSelect">🎒 Select Backpack:</label>
+      <label for="bagSelect"><i class="fas fa-backpack"></i> Select Backpack:</label>
       <select id="bagSelect"></select>
     </div>
 
     <div class="section">
-      <label for="itemSearch">🔍 Search Item:</label>
+      <label for="itemSearch"><i class="fas fa-search"></i> Search Item:</label>
       <input type="text" id="itemSearch" placeholder="Search item..." />
     </div>
 
     <div class="section">
-      <label for="itemSelect">📦 Select Item:</label>
+      <label for="itemSelect"><i class="fas fa-box-open"></i> Select Item:</label>
       <select id="itemSelect" size="10"></select>
     </div>
 
     <div class="section">
-      <label for="stateInput">⚙️ State (8000 for Shredder):</label>
+      <label for="stateInput"><i class="fas fa-cog"></i> State (8000 for Shredder):</label>
       <input type="text" id="stateInput" value="0" />
     </div>
 
     <div class="section">
-      <label for="hue">🎨 Hue (0–210):</label>
+      <label for="hue"><i class="fas fa-palette"></i> Hue (0–210): <span id="hueValue">161</span></label>
       <input type="range" id="hue" min="0" max="210" value="161" />
       <label><input type="checkbox" id="randomHue" /> Random</label>
     </div>
 
     <div class="section">
-      <label for="sat">🎨 Saturation (0–120):</label>
+      <label for="sat"><i class="fas fa-palette"></i> Saturation (0–120): <span id="satValue">120</span></label>
       <input type="range" id="sat" min="0" max="120" value="120" />
       <label><input type="checkbox" id="randomSat" /> Random</label>
     </div>
 
     <div class="section">
-      <label for="size">📏 Size (–128 to 127):</label>
+      <label for="size"><i class="fas fa-ruler"></i> Size (–128 to 127): <span id="sizeValue">0</span></label>
       <input type="range" id="size" min="-128" max="127" value="0" />
       <label><input type="checkbox" id="randomSize" /> Random</label>
     </div>
 
     <div class="section">
-      <label for="count">🔢 Count (Max 250):</label>
+      <label for="count"><i class="fas fa-hashtag"></i> Count (Max 250):</label>
       <input type="text" id="count" value="1" />
     </div>
 
-    <button onclick="addItem()">➕ Add Item</button>
+    <button onclick="addItem()"><i class="fas fa-plus"></i> Add Item</button>
     <div id="itemList"></div>
-    <button onclick="generateJSON()">💾 Generate JSON</button>
-    <button onclick="resetFields()">♻️ Reset</button>
+    <button onclick="generateJSON()"><i class="fas fa-save"></i> Generate JSON</button>
+    <button onclick="resetFields()"><i class="fas fa-redo"></i> Reset</button>
 
-    <div class="credit">Made by EvanBlokEnder</div>
+    <div class="credit">Made by EvanBlokEnder with <i class="fas fa-heart" style="color: #ff3333;"></i></div>
+  </div>
+
+  <!-- Terminal Button -->
+  <div class="terminal-btn" id="terminalBtn">💻</div>
+  
+  <!-- Terminal -->
+  <div class="terminal" id="terminal">
+    <div class="terminal-header">
+      <div class="terminal-title">Admin Terminal</div>
+      <div class="terminal-close" id="terminalClose">&times;</div>
+    </div>
+    <div class="terminal-body" id="terminalOutput">
+      <div>XMod Terminal v1.0 - Type /help for commands</div>
+    </div>
+    <div class="terminal-input">
+      <span class="terminal-prompt">></span>
+      <input type="text" id="terminalCmd" placeholder="Type command...">
+    </div>
   </div>
 
   <script>
-    const itemList = document.getElementById("itemList");
-    const bagSelect = document.getElementById("bagSelect");
-    const itemSelect = document.getElementById("itemSelect");
-    const itemSearch = document.getElementById("itemSearch");
+    // Secret key from GitHub (would be set as environment variable in real deployment)
+    const SECRET_KEY = "87798";
+    let isAdmin = false;
+    let itemList = document.getElementById("itemList");
+    let bagSelect = document.getElementById("bagSelect");
+    let itemSelect = document.getElementById("itemSelect");
+    let itemSearch = document.getElementById("itemSearch");
     let items = [];
     let itemData = [];
+    
+    // Terminal elements
+    const terminalBtn = document.getElementById("terminalBtn");
+    const terminal = document.getElementById("terminal");
+    const terminalClose = document.getElementById("terminalClose");
+    const terminalCmd = document.getElementById("terminalCmd");
+    const terminalOutput = document.getElementById("terminalOutput");
+    const adminBanner = document.getElementById("adminBanner");
 
+    // Range value displays
+    document.getElementById("hue").addEventListener("input", function() {
+      document.getElementById("hueValue").textContent = this.value;
+    });
+    
+    document.getElementById("sat").addEventListener("input", function() {
+      document.getElementById("satValue").textContent = this.value;
+    });
+    
+    document.getElementById("size").addEventListener("input", function() {
+      document.getElementById("sizeValue").textContent = this.value;
+    });
+
+    // Terminal functionality
+    terminalBtn.addEventListener("click", function() {
+      terminal.style.display = terminal.style.display === "flex" ? "none" : "flex";
+      if (terminal.style.display === "flex") {
+        terminalCmd.focus();
+      }
+    });
+    
+    terminalClose.addEventListener("click", function() {
+      terminal.style.display = "none";
+    });
+    
+    terminalCmd.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        const cmd = this.value.trim();
+        this.value = "";
+        
+        // Echo the command
+        addTerminalLine(`> ${cmd}`, "cmd");
+        
+        // Process command
+        if (cmd.startsWith("/")) {
+          processCommand(cmd.substring(1));
+        } else {
+          addTerminalLine("Error: Commands must start with /", "error");
+        }
+      }
+    });
+    
+    function addTerminalLine(text, type = "normal") {
+      const line = document.createElement("div");
+      line.textContent = text;
+      
+      switch(type) {
+        case "cmd":
+          line.style.color = "var(--accent)";
+          break;
+        case "error":
+          line.style.color = "var(--error)";
+          break;
+        case "success":
+          line.style.color = "var(--primary)";
+          break;
+        case "admin":
+          line.style.color = "#00ff00";
+          break;
+      }
+      
+      terminalOutput.appendChild(line);
+      terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    }
+    
+    function processCommand(cmd) {
+      const parts = cmd.split(" ");
+      const command = parts[0].toLowerCase();
+      const args = parts.slice(1);
+      
+      switch(command) {
+        case "help":
+          addTerminalLine("Available commands:", "normal");
+          addTerminalLine("/help - Show this help", "normal");
+          addTerminalLine("/login [password] - Authenticate as admin", "normal");
+          addTerminalLine("/banner [message] - Set admin banner (admin only)", "normal");
+          addTerminalLine("/shutdown - Shutdown system (admin only)", "normal");
+          addTerminalLine("/clear - Clear terminal", "normal");
+          break;
+          
+        case "login":
+          if (args.length === 0) {
+            addTerminalLine("Usage: /login [password]", "error");
+          } else if (args[0] === SECRET_KEY) {
+            isAdmin = true;
+            addTerminalLine("Admin access granted!", "admin");
+          } else {
+            addTerminalLine("Invalid password!", "error");
+          }
+          break;
+          
+        case "banner":
+          if (!isAdmin) {
+            addTerminalLine("Admin access required!", "error");
+            return;
+          }
+          if (args.length === 0) {
+            adminBanner.style.display = "none";
+            addTerminalLine("Banner cleared", "success");
+          } else {
+            adminBanner.textContent = args.join(" ");
+            adminBanner.style.display = "block";
+            addTerminalLine("Banner set", "success");
+          }
+          break;
+          
+        case "shutdown":
+          if (!isAdmin) {
+            addTerminalLine("Admin access required!", "error");
+            return;
+          }
+          addTerminalLine("Initiating shutdown sequence...", "admin");
+          setTimeout(() => {
+            document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:50vh;'>SYSTEM SHUTDOWN INITIATED</h1>";
+          }, 2000);
+          break;
+          
+        case "clear":
+          terminalOutput.innerHTML = "";
+          addTerminalLine("Terminal cleared", "success");
+          break;
+          
+        default:
+          addTerminalLine(`Unknown command: ${command}`, "error");
+      }
+    }
+
+    // Main application functionality
     fetch("files.txt")
       .then(res => res.json())
       .then(data => {
@@ -179,7 +602,7 @@
         itemData.push(wrappedItem);
 
         const div = document.createElement("div");
-        div.textContent = `Wrapped in Heart Gun -> ${selectedItem} — Hue:${hue} Sat:${sat} Size:${size}${state > 0 ? " (State:" + state + ")" : ""}`;
+        div.innerHTML = `<i class="fas fa-box"></i> Wrapped in Heart Gun → ${selectedItem} — Hue:${hue} Sat:${sat} Size:${size}${state > 0 ? " (State:" + state + ")" : ""}`;
         itemList.appendChild(div);
       }
     }
@@ -208,8 +631,11 @@
       document.getElementById("count").value = 1;
       document.getElementById("stateInput").value = "0";
       document.getElementById("hue").value = 161;
+      document.getElementById("hueValue").textContent = "161";
       document.getElementById("sat").value = 120;
+      document.getElementById("satValue").textContent = "120";
       document.getElementById("size").value = 0;
+      document.getElementById("sizeValue").textContent = "0";
       document.getElementById("randomHue").checked = false;
       document.getElementById("randomSat").checked = false;
       document.getElementById("randomSize").checked = false;
@@ -220,6 +646,16 @@
     function getRandom(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
+    
+    // Animal click animations
+    document.querySelectorAll(".animal").forEach(animal => {
+      animal.addEventListener("click", function() {
+        this.style.animation = "none";
+        setTimeout(() => {
+          this.style.animation = "float 6s ease-in-out infinite";
+        }, 10);
+      });
+    });
   </script>
 </body>
 </html>
