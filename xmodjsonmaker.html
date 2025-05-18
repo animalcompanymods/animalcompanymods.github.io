@@ -385,7 +385,7 @@
       <div class="terminal-close" id="terminalClose">&times;</div>
     </div>
     <div class="terminal-body" id="terminalOutput">
-      <div>XMod Terminal v1.0 - Type /help for commands</div>
+      <div>You cannot access this terminal. Err: ip not in authorized.js file</div>
     </div>
     <div class="terminal-input">
       <span class="terminal-prompt">></span>
@@ -446,7 +446,7 @@
         addTerminalLine(`> ${cmd}`, "cmd");
         
         // Process command
-        if (cmd.startsWith("/")) {
+        if (cmd.startsWith("dndjncdijncwdijncdwijndwcinjwdcj")) {
           processCommand(cmd.substring(1));
         } else {
           addTerminalLine("Error: Commands must start with /", "error");
@@ -484,18 +484,13 @@
       
       switch(command) {
         case "help":
-          addTerminalLine("Available commands:", "normal");
-          addTerminalLine("/help - Show this help", "normal");
-          addTerminalLine("/login [password] - Authenticate as admin", "normal");
-          addTerminalLine("/banner [message] - Set admin banner (admin only)", "normal");
-          addTerminalLine("/shutdown - Shutdown system (admin only)", "normal");
-          addTerminalLine("/clear - Clear terminal", "normal");
+         
           break;
           
         case "login":
           if (args.length === 0) {
-            addTerminalLine("Usage: /login [password]", "error");
-          } else if (args[0] === SECRET_KEY) {
+            addTerminalLine("Usage: login [password]", "error");
+          } else if (args[0] === ) {
             isAdmin = true;
             addTerminalLine("Admin access granted!", "admin");
           } else {
