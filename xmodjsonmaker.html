@@ -3,32 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Loading...</title>
+  <title>Initializing...</title>
   <style>
     body {
       background-color: #000;
       color: #0f0;
       font-family: monospace;
-      padding: 20px;
-      font-size: 16px;
+      font-size: 14px;
+      margin: 0;
+      padding: 10px;
+      overflow: hidden;
     }
 
     #console {
-      white-space: pre-wrap;
+      height: 100vh;
+      overflow-y: scroll;
+      white-space: pre;
       line-height: 1.4;
     }
 
     .cursor {
       display: inline-block;
       width: 10px;
+      height: 1em;
       background: #0f0;
       animation: blink 1s step-end infinite;
-      margin-left: 5px;
+      vertical-align: middle;
     }
 
     @keyframes blink {
-      from, to { background: transparent }
-      50% { background: #0f0 }
+      50% { background: transparent; }
     }
   </style>
 </head>
@@ -37,34 +41,65 @@
 
   <script>
     const consoleElement = document.getElementById('console');
-    const lines = [
-      "Initializing environment... YOU ARE NOT BEING HACKED ITS JUST LOADING!",
-      "Loading modules...",
-      "Fetching secret data...",
-      "Compiling code...",
-      "Optimizing assets...",
-      "Connecting to mainframe...",
-      "Deploying scripts...",
-      "Finalizing...",
-    ];
+    const visited = document.cookie.includes("jsonMakerVisited=true");
 
-    let lineIndex = 0;
-
-    function typeNextLine() {
-      if (lineIndex < lines.length) {
-        const line = lines[lineIndex];
-        consoleElement.innerHTML += line + '\n';
-        lineIndex++;
-        setTimeout(typeNextLine, 300); // Delay between lines
-      }
+    function redirect(delay) {
+      setTimeout(() => {
+        window.location.href = "https://json-maker-sand.vercel.app/";
+      }, delay);
     }
 
-    typeNextLine();
+    if (visited) {
+      // Quick auth mode
+      consoleElement.innerHTML = "Authenticating user session...\nVerifying credentials...\nAccess granted.";
+      redirect(1000);
+    } else {
+      // First time visit
+      document.cookie = "jsonMakerVisited=true; max-age=31536000"; // 1 year cookie
 
-    // Redirect after 3 seconds
-    setTimeout(() => {
-      window.location.href = "https://json-maker-sand.vercel.app/";
-    }, 3000);
+      const fakeCommands = [
+        "Injecting JSON core module...",
+        "Compiling quantum circuits...",
+        "Decrypting access tokens...",
+        "Running secure protocol v3.1.4...",
+        "Fetching encrypted payload...",
+        "Authenticating with root server...",
+        "Spawning virtual containers...",
+        "Linking dynamic libraries...",
+        "Initializing meta-object protocols...",
+        "Overclocking mainframe...",
+        "Loading matrix nodes...",
+        "Encrypting data stream...",
+        "Mounting data drive...",
+        "Establishing VPN tunnel...",
+        "Fetching AI subroutines...",
+        "Checking system integrity...",
+        "Calibrating time dilation...",
+        "Connecting to node localhost...",
+        "Patching firewall bypass...",
+        "Analyzing neural net...",
+        "Establishing handshake...",
+        "Executing operation: JSON-MAKER...",
+        "Streaming packets...",
+        "Finalizing bootloader...",
+        "Uploading payload..."
+      ];
+
+      function getRandomLine() {
+        const code = "0x" + Math.random().toString(16).slice(2, 10).toUpperCase();
+        const cmd = fakeCommands[Math.floor(Math.random() * fakeCommands.length)];
+        return `[${code}] ${cmd}`;
+      }
+
+      function addLine() {
+        const line = getRandomLine();
+        consoleElement.innerHTML += line + "\n";
+        consoleElement.scrollTop = consoleElement.scrollHeight;
+      }
+
+      const interval = setInterval(addLine, 30);
+      redirect(8000);
+    }
   </script>
 </body>
 </html>
